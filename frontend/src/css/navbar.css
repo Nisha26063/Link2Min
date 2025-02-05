@@ -1,0 +1,82 @@
+/* Navbar container */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 20px;
+    background-color: #f6f8fc;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  /* Left section: Gmail logo & menu */
+  .navbar-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  
+  .gmail-logo {
+    font-size: 18px;
+    font-weight: 600;
+    color: #171818;
+  }
+  
+  /* Center section: Search bar */
+  .search-container {
+    display: flex;
+    align-items: center;
+    background: white;
+    border-radius: 24px;
+    padding: 6px 12px;
+    width: 50%;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  }
+  
+  .search-icon,
+  .filter-icon {
+    color: #5f6368;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
+  .search-input {
+    flex-grow: 1;
+    border: none;
+    outline: none;
+    font-size: 14px;
+    padding: 4px 8px;
+    background: transparent;
+  }
+  
+  /* Right section: Icons & profile */
+  .navbar-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  
+  .icon {
+    font-size: 18px;
+    color: #5f6368;
+    cursor: pointer;
+    transition: 0.2s;
+  }
+  
+  .icon:hover {
+    color: black;
+  }
+  
+  .sparkle-icon {
+    font-size: 20px;
+    color: #5f6368;
+    cursor: pointer;
+  }
+  
+  /* Profile picture */
+  .profile-pic {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+  
