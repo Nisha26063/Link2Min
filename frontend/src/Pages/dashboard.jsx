@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FaPen, FaStar, FaRegPaperPlane, FaRegFileAlt, FaPlus } from "react-icons/fa";
+import { FaPen, FaStar, FaRegPaperPlane, FaRegFileAlt, FaPlus, FaAddressBook, FaClock } from "react-icons/fa";
 import { MdInbox } from "react-icons/md";
 import '../css/dashboard.css';
 import Navbar from "../Components/navbar";
@@ -29,6 +29,11 @@ const Dashboard = () => {
     navigate("/dashboard/schedule")
   }
 
+  const handleMinutes=()=>
+  {
+    navigate("/dashboard/minutes")
+  }
+
   return (
     <>
       <Navbar toggleSidebar={toggleSidebar} />
@@ -43,9 +48,11 @@ const Dashboard = () => {
             <li className="active">
               <MdInbox className="icon" /> Inbox <span className="count">2,236</span>
             </li>
-            <li><FaPlus className="icon" /><button className="sidebarbtn" onClick={handleSchedule}>Schedule</button></li>
+            <li><FaAddressBook className="icon" /><button className="sidebarbtn" onClick={handleSchedule}>Schedule</button></li>
             <li><FaRegPaperPlane className="icon" /><button className="sidebarbtn"> Sent</button></li>
             <li><FaRegFileAlt className="icon" /> <button className="sidebarbtn">Drafts</button><span className="count">21</span></li>
+            <li><FaPlus className="icon"/><button className="sidebarbtn">Start Meeting</button></li>
+            <li><FaClock className="icon"/><button className="sidebarbtn" onClick={handleMinutes}>Minutes</button> </li>
           </ul>
         </aside>
 
