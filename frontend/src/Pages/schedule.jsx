@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import "../css/schedule.css"
 
 const Schedule = () => {
     const [meetings, setMeetings] = useState([]);
@@ -33,7 +34,7 @@ const Schedule = () => {
 
     return (
         <div>
-            <h2>Meeting Schedule</h2>
+            <h2><center>Meeting Schedule</center></h2>
             <table border="1">
                 <thead>
                     <tr>
