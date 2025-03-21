@@ -4,6 +4,7 @@ import Login from './Pages/login';
 import Dashboard from './Pages/dashboard';
 import Schedule from './Pages/schedule';
 import { Minutes } from './Pages/minutes';
+import { Meeting } from './Pages/meeting';
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/dashboard/schedule" element={<Schedule/>}/>
         <Route path="/dashboard/minutes" element={<Minutes/>}/>
+        <Route path="/dashboard/meeting" element={<Meeting/>}/>
       </Routes>
     </Router>
   );

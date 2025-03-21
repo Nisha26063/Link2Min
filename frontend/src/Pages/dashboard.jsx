@@ -34,6 +34,10 @@ const Dashboard = () => {
     navigate("/dashboard/minutes")
   }
 
+  const handleMeeting=()=>{
+    navigate("/dashboard/meeting")
+  }
+
   return (
     <>
       <Navbar toggleSidebar={toggleSidebar} />
@@ -48,11 +52,11 @@ const Dashboard = () => {
             <li className="active">
               <MdInbox className="icon" /> Inbox <span className="count">2,236</span>
             </li>
-            <li><FaAddressBook className="icon" /><button className="sidebarbtn" onClick={handleSchedule}>Schedule</button></li>
-            <li><FaRegPaperPlane className="icon" /><button className="sidebarbtn"> Sent</button></li>
-            <li><FaRegFileAlt className="icon" /> <button className="sidebarbtn">Drafts</button><span className="count">21</span></li>
-            <li><FaPlus className="icon"/><button className="sidebarbtn">Start Meeting</button></li>
-            <li><FaClock className="icon"/><button className="sidebarbtn" onClick={handleMinutes}>Minutes</button> </li>
+            <li className="listbtn"><FaAddressBook className="icon" /><button className="sidebarbtn" onClick={handleSchedule}>Schedule</button></li>
+            <li className="listbtn"><FaRegPaperPlane className="icon" /><button className="sidebarbtn"> Sent</button></li>
+            <li className="listbtn"><FaRegFileAlt className="icon" /> <button className="sidebarbtn">Drafts</button><span className="count">21</span></li>
+            <li className="listbtn"><FaPlus className="icon"/><button className="sidebarbtn" onClick={handleMeeting}>Start Meeting</button></li>
+            <li className="listbtn"><FaClock className="icon"/><button className="sidebarbtn" onClick={handleMinutes}>Minutes</button> </li>
           </ul>
         </aside>
 
