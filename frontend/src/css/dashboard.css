@@ -53,6 +53,7 @@
     flex-grow: 1; /* Pushes sidebar items to take space */
 }
 
+
 .sidebar-menu li {
     padding: 10px;
     display: flex;
@@ -79,6 +80,16 @@
     border-radius: 8px;
     font-size: 15px;
 }
+
+.listbtn:hover {
+    background: #dee4e7;
+
+    button {
+        background: inherit;
+    }
+}
+
+
 
 .count {
     margin-left: auto;
@@ -181,3 +192,4 @@
     font-size: 12px;
     color: #888;
 }
+
