@@ -37,9 +37,34 @@ export const Meeting = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     console.log("Meeting Details:", formData);
+
+    const requestData = {
+      title: formData.title,
+      date: formData.date,
+      startTime: formData.startTime,
+      endTime: formData.endTime,
+      participants: formData.participants,
+    };
+
+    try {
+      const response = await fetch("http://localhost:5000/create_meeting", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(requestData),
+      });
+  
+      const data = await response.json();
+      if (response.ok) {
+        alert(`Meeting created! Google Meet Link: ${data.meet_link}`);
+      } else {
+        alert(`Error: ${data.error}`);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
   };
 
   return (
