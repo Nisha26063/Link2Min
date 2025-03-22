@@ -24,37 +24,32 @@ export const Mailbox = () => {
   };
 
   return (
-    <div>
-      <main className="inbox">
-        <div className="inbox-header">
-          <h2>Primary</h2>
-          <div className="filter">
-            <span>Important <span className="important">50 new</span></span>
-            <span>Starred <span className="starred"> 3 new</span></span>
-          </div>
+    <main className="inbox">
+      <div className="inbox-header">
+        <h2>Primary</h2>
+        <div className="filter">
+          <span>Important <span className="important">50 new</span></span>
+          <span>Starred <span className="starred"> 3 new</span></span>
         </div>
-
-        {/* Email List */}
-        <ul className="email-list">
-          {emails.map((email, index) => (
-            <li key={index} className={`email-item ${email.unread ? "unread" : ""}`}>
-              <div className="email-checkbox">
-                <input type="checkbox" />
-                <FaStar
-                  className={`star ${email.starred ? "starred" : ""}`} /*If email.starred === true → className="star starred"
-                  If email.starred === false → className="star" */
-
-                  
-                  onClick={() => toggleStar(index)} // Toggle star on click
-                />
-              </div>
-              <span className="sender">{email.sender}</span>
-              <span className="subject">{email.subject}</span>
-              <span className="time">{email.time}</span>
-            </li>
-          ))}
-        </ul>
-      </main>
-    </div>
+      </div>
+      
+      {/* Email list */}
+      <ul className="email-list">
+        {emails.map((email, index) => (
+          <li key={index} className={`email-item ${email.unread ? "unread" : ""}`}>
+            <div className="email-checkbox">
+              <input type="checkbox" />
+              <FaStar
+                className={`star ${email.starred ? "starred" : ""}`}
+                onClick={() => toggleStar(index)}
+              />
+            </div>
+            <div className="sender">{email.sender}</div>
+            <div className="subject">{email.subject}</div>
+            <div className="time">{email.time}</div>
+          </li>
+        ))}
+      </ul>
+    </main>
   );
 };

@@ -1,0 +1,101 @@
+.compose-wrapper {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    min-height: calc(100vh - 60px);
+    padding: 20px;
+    overflow-x: hidden; /* Prevent horizontal scroll */
+}
+
+.compose-container {
+    position: relative;
+    width: 750px; /* Fixed width */
+    max-width: 100%; /* Ensure it doesn't overflow */
+    background: #f9f9f9;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    padding: 15px;
+    z-index: 100;
+    margin-left: 20px; /* Add some space from sidebar */
+}
+  
+.compose-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 18px;
+    font-weight: bold;
+}
+  
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+}
+  
+.compose-body {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 10px;
+}
+  
+.compose-input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+  
+.compose-textarea {
+    width: 100%;
+    height: 230px; /* Adjust height as needed */
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    resize: none;
+}
+  
+.compose-toolbar {
+    display: flex;
+    justify-content: space-around;
+    padding: 8px;
+    background: #eee;
+    border-radius: 5px;
+    margin-top: 10px;
+}
+  
+.toolbar-icon {
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+  
+.toolbar-icon:hover {
+    color: #007bff;
+}
+  
+.delete {
+    color: red;
+}
+  
+.compose-footer {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 10px;
+}
+  
+.send-btn {
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+  
+.send-btn:hover {
+    background: #0056b3;
+}
+  

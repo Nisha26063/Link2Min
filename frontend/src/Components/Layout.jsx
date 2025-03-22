@@ -1,10 +1,8 @@
 import React, { useState } from "react";
-import "../css/dashboard.css";
-import Navbar from "../Components/navbar";
-import { Mailbox } from "../Components/mailbox";
-import Sidebar from "../Components/sidebar";
+import Navbar from "./navbar";
+import Sidebar from "./sidebar";
 
-const Dashboard = () => {
+const Layout = ({ children }) => {
   const [isSidebarVisible, setIsSidebarVisible] = useState(true);
 
   const toggleSidebar = () => {
@@ -17,11 +15,13 @@ const Dashboard = () => {
       <div className="gmail-container">
         <Sidebar isSidebarVisible={isSidebarVisible} />
         <div className={`mailbox-container ${!isSidebarVisible ? 'sidebar-hidden' : ''}`}>
-          <Mailbox />
+          <div className="layout-page-content">
+            {children}
+          </div>
         </div>
       </div>
     </>
   );
 };
 
-export default Dashboard;
+export default Layout; 
