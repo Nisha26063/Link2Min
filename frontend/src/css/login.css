@@ -4,7 +4,10 @@
     padding: 0;
     box-sizing: border-box;
     font-family: 'Roboto', sans-serif;
+
 }
+
+
 
 /* Centered Container */
 body {
@@ -12,7 +15,8 @@ body {
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background: #d2cfcf;
+
+
 }
 
 /* Login Container */
@@ -22,11 +26,12 @@ body {
     align-items: center;
     width: 100%;
     height: 100vh;
+
 }
 
 /* Login Box */
 .login-box {
-    width: 300px;
+    width: 500px;
     padding: 2rem;
     border-radius: 10px;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
@@ -119,4 +124,22 @@ body {
 
 .toggle-text:hover {
     text-decoration: underline;
+}
+
+
+/* Fade-in animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Apply the animation to the login box */
+.login-box {
+    animation: fadeIn 3s ease-in-out;
 }

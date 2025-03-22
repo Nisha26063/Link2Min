@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import '../css/login.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
+import logo from '../Assets/bgmlink.svg'; // Adjust the path as needed
+
 
 const Login = () => {
     const [isSignUp, setIsSignUp] = useState(false);
@@ -14,7 +16,9 @@ const Login = () => {
     };
 
     return (
+        
         <div className="login-container">
+
             <div className="login-box">
                 <h1 className="logo-text">{isSignUp ? "Create your account" : "Sign in"}</h1>
                 <form className="login-form">

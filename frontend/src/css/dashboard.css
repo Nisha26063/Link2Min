@@ -2,33 +2,50 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: Arial, sans-serif;
+    font-family: 'Poppins','Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif /* Change to any of the above */
 }
 
+/* Ensure the container takes full width and height */
 .gmail-container {
     display: flex;
-    height: 100vh; /* Ensures full height */
-    width: 100vw;  /* Ensures full width */
-    overflow: hidden;
-}
-
-
+    height: 100vh; /* Full screen height */
+    width: 100vw; /* Full screen width */
+    margin: 0;
+    padding: 0;
+  }
+  
+/* Sidebar should have a transition effect */
 .sidebar {
-    width: 250px;
+    width: 250px; /* Default width */
+    min-width: 250px;
+    height: 100vh;
+    background-color: #f1f1f1;
     transition: transform 0.3s ease-in-out;
-    background: #f5f5f5;
-    padding: 10px;
-    border-right: 1px solid #ddd;
-    display: flex;
-    flex-direction: column;
-    height: 100vh; /* Full height */
-}
-
-.sidebar.hidden {
+    position: relative;
+  }
+  
+  /* Hide sidebar when toggled */
+  .sidebar.hidden {
     transform: translateX(-100%);
     position: absolute;
-}
-
+  }
+  
+  
+  /* Mailbox should take up all remaining space */
+  .mailbox-container {
+    flex-grow: 1;
+    width: 100%;
+    height: 100vh;
+    overflow-y: auto; /* Enable scrolling */
+    background-color: #fff;
+  }
+  
+  /* Ensure Mailbox content stretches */
+  .mailbox {
+    width: 100%;
+    height: 100%;
+  }
+  
 
 .compose-btn {
     width: 100%;
@@ -97,99 +114,5 @@
     padding: 2px 6px;
     border-radius: 10px;
     font-size: 12px;
-}
-
-/* Inbox Section */
-.inbox {
-    flex-grow: 1; /* Ensures inbox takes up the rest of the space */
-    background: #fff;
-    padding: 15px;
-    overflow-y: auto; /* Allows scrolling */
-    height: 100vh; /* Makes sure it fills the height */
-    transition: margin-left 1.7s ease-in-out;
-
-}
-.sidebar.hidden + .inbox {
-    margin-left: 0;
-}
-
-/* Inbox Header */
-.inbox-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid #ddd;
-    padding-bottom: 10px;
-}
-
-.inbox-header h2 {
-    font-size: 20px;
-}
-
-.filter span {
-    margin-right: 15px;
-    font-size: 14px;
-    cursor: pointer;
-}
-
-.green { color: green; }
-.blue { color: blue; }
-.orange { color: orange; }
-
-/* Email List */
-.email-list {
-    list-style: none;
-    margin-top: 15px;
-    flex-grow: 1; /* Ensures email list fills space */
-    overflow-y: auto; /* Allows scrolling */
-}
-
-.email-item {
-    display: flex;
-    align-items: center;
-    padding: 10px;
-    border-bottom: 1px solid #ddd;
-    cursor: pointer;
-    transition: background 0.2s;
-}
-
-.email-item:hover {
-    background: #f1f3f4;
-}
-
-.email-item.unread {
-    font-weight: bold;
-}
-
-.email-checkbox {
-    display: flex;
-    align-items: center;
-    margin-right: 10px;
-}
-
-.star {
-    margin-left: 5px;
-    color: #bbb;
-    cursor: pointer;
-}
-
-.star.starred {
-    color: gold;
-}
-
-.sender {
-    width: 200px;
-    font-weight: bold;
-}
-
-.subject {
-    flex-grow: 1;
-    color: #666;
-}
-
-.time {
-    margin-left: auto;
-    font-size: 12px;
-    color: #888;
 }
 
