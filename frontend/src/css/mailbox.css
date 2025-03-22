@@ -1,18 +1,27 @@
+.mailbox-wrapper {
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    border: #666;
 
-
-.inbox {
-    flex-grow: 1; /* Takes up the remaining space */
-    background: #fff;
-    padding: 15px;
-    overflow-y: auto; /* Allows scrolling */
-    height: 100vh; /* Full height */
-    width: 100%; /* Ensures full width */
-    transition: margin-left 0.3s ease-in-out;
-    display: flex;
-    flex-direction: column;
 }
 
+.inbox {
+    flex: 1; /* Take full available space */
+    background: #fff;
+    padding: 0; /* Remove all padding */
+    margin: 0; /* Remove all margins */
+    border: 0.5px solid #666; /* Remove any borders */
+    overflow-y: auto;
+    height: calc(100vh - 60px);
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    margin-top: 15px;
 
+}
 
 /* Inbox Header */
 .inbox-header {
@@ -20,7 +29,11 @@
     justify-content: space-between;
     align-items: center;
     border-bottom: 1px solid #ddd;
-    padding-bottom: 10px;
+    padding: 10px 15px; /* Keep some padding for the header content */
+    background-color: #fff;
+    margin: 0;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .inbox-header h2 {
@@ -39,20 +52,23 @@
 /* Email List */
 .email-list {
     list-style: none;
-    margin-top: 15px;
-    flex-grow: 1; /* Ensures email list fills space */
-    overflow-y: auto; /* Allows scrolling */
+    padding: 0;
+    margin: 0;
+    flex: 1;
     width: 100%;
-    height: 100vh;
+    box-sizing: border-box;
 }
 
 .email-item {
     display: flex;
     align-items: center;
-    padding: 10px;
+    padding: 10px 15px;
+    margin: 0;
     border-bottom: 1px solid #ddd;
     cursor: pointer;
     transition: background 0.2s;
+    box-sizing: border-box;
+    width: 100%;
 }
 
 .email-item:hover {

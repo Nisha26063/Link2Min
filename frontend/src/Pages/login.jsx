@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import '../css/login.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
-import logo from '../Assets/bgmlink.svg'; // Adjust the path as needed
 
 
 const Login = () => {
