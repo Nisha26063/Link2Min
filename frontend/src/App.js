@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from './Pages/login';
 import Dashboard from './Pages/dashboard';
 import Schedule from './Pages/schedule';
-import { Minutes } from './Pages/minutes';
+import Minutes from './Pages/minutes'; // Import the Minutes component
 import { Meeting } from './Pages/meeting';
 import ComposeEmail from './Components/compose';
 import Layout from './Components/Layout';
@@ -13,11 +13,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<Login />} />
-        <Route path="/dashboard" element={
-
-            <Dashboard />
-
-        } />
+        <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/dashboard/schedule" element={
           <Layout>
             <Schedule />
@@ -25,7 +21,7 @@ function App() {
         } />
         <Route path="/dashboard/minutes" element={
           <Layout>
-            <Minutes />
+            <Minutes /> {/* Add the Minutes component here */}
           </Layout>
         } />
         <Route path="/dashboard/meeting" element={
@@ -33,7 +29,7 @@ function App() {
             <Meeting />
           </Layout>
         } />
-        <Route path='dashboard/compose' element={
+        <Route path="/dashboard/compose" element={
           <Layout>
             <ComposeEmail />
           </Layout>

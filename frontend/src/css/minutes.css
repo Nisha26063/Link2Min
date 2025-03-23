@@ -1,75 +1,38 @@
-/* Minutes.css */
-.container {
-    max-width: 710px;
-    width: 1000px;
-    margin: 0 auto;
-    padding: 16px;
-    background: rgb(238, 231, 231);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-  }
-  
-  .header {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 16px;
-  }
-  
-  .title {
-    font-size: 1.25rem;
-    font-weight: 600;
-  }
-  
-  .status {
-    color: green;
-    font-weight: 500;
-    font-size: 0.9rem;
-  }
-  
-  .textarea {
-    width: 100%;
-    height: 360px;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    outline: none;
-    transition: border 0.2s;
-  }
-  
-  .textarea:focus {
-    border-color: #007bff;
-    box-shadow: 0 0 4px rgba(0, 123, 255, 0.5);
-  }
-  
-  .button-container {
-    display: flex;
-    justify-content: flex-end;
-    gap: 8px;
-    margin-top: 16px;
-  }
-  
-  .button {
-    padding: 8px 16px;
-    border: none;
-    border-radius: 6px;
-    color: white;
-    cursor: pointer;
-    transition: background 0.2s;
-  }
-  
-  .button.send {
-    background: #007bff;
-  }
-  
-  .button.send:hover {
-    background: #0056b3;
-  }
-  
-  .button.download {
-    background: #6c757d;
-  }
-  
-  .button.download:hover {
-    background: #545b62;
-  }
-  
+.minutes-container {
+  padding: 20px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+th, td {
+  border: 1px solid #ccc;
+  padding: 10px;
+  text-align: left;
+}
+
+.minutes-textarea {
+  width: 100%;
+  height: 100px;
+  padding: 10px;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.save-button {
+  padding: 10px 20px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.save-button:hover {
+  background-color: #218838;
+}

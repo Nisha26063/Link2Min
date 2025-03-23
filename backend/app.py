@@ -1,3 +1,4 @@
+# app.py
 from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 import sqlite3
@@ -10,8 +11,8 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.options import Options
 import google.generativeai as genai
-from docx import Document  # For creating .doc files
 from datetime import datetime  # To capture the current date and time
+from send import send_minutes_to_participants  # Import the send function
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
@@ -20,7 +21,7 @@ CORS(app, resources={r"/*": {"origins": "*"}})
 db_path = os.path.abspath("data.db")
 print(f"Database path: {db_path}")
 
-# Directory to store .doc files
+# Directory to store .doc files (not used anymore, but kept for reference)
 MINUTES_DIR = "minutes_files"
 os.makedirs(MINUTES_DIR, exist_ok=True)  # Create the directory if it doesn't exist
 
@@ -50,8 +51,9 @@ def init_db():
                 meeting_id TEXT,
                 meeting_name TEXT,
                 meet_url TEXT,
-                file_link TEXT,  -- Store the file path
-                file_type TEXT   -- Store the file type (doc)
+                minutes_text TEXT,  -- Store the minutes text
+                date TEXT,          -- Add date column
+                participants TEXT  -- Add participants column
             )
         """)
         conn.commit()
@@ -99,28 +101,6 @@ def summarize_transcript_with_gemini(transcript, date, participants):
     except Exception as e:
         print(f"Error calling Gemini API: {e}")
         return None
-
-# Function to generate minutes as a .doc file
-def generate_minutes_doc(minutes, meeting_name, date, participants):
-    """Generate minutes as a .doc file."""
-    doc = Document()
-    doc.add_heading(f"Meeting Minutes: {meeting_name}", level=1)
-    doc.add_paragraph(f"Date: {date}")
-    doc.add_paragraph(f"Participants: {participants}")
-    doc.add_paragraph("")  # Add a blank line
-
-    # Add the minutes content
-    for line in minutes.split("\n"):
-        doc.add_paragraph(line.strip())
-
-    # Replace colons in the date to make the filename valid
-    safe_date = date.replace(":", "-")  # Replace colons with hyphens
-    doc_filename = f"minutes_{meeting_name}_{safe_date}.doc"
-    doc_filepath = os.path.join(MINUTES_DIR, doc_filename)
-    doc.save(doc_filepath)
-    print(f"DOC file saved to {doc_filepath}")
-    return doc_filepath
-
 
 def start_meeting(meeting_id, meeting_name, url, participants):
     """Start a Google Meet session and extract captions."""
@@ -207,17 +187,18 @@ def start_meeting(meeting_id, meeting_name, url, participants):
         print("Failed to generate minutes. Using raw transcript as fallback.")
         minutes = transcript
 
-    # Generate minutes as a .doc file
-    doc_filepath = generate_minutes_doc(minutes, meeting_name, current_date_time, participants)
+    # Print the minutes text in the prompt
+    print("Generated Minutes:")
+    print(minutes)
 
-    # Store the transcript and minutes file link in the database
-    store_transcript(meeting_id, meeting_name, url, transcript, current_date_time, participants, doc_filepath)
+    # Store the transcript and minutes text in the database
+    store_transcript(meeting_id, meeting_name, url, transcript, current_date_time, participants, minutes)
 
     # Keep the browser open for 30 seconds before quitting
     time.sleep(30)
     driver.quit()
 
-def store_transcript(meeting_id, meeting_name, meet_url, transcript, date, participants, file_link):
+def store_transcript(meeting_id, meeting_name, meet_url, transcript, date, participants, minutes_text):
     """Save extracted transcript and generated minutes in SQLite."""
     try:
         conn = sqlite3.connect(db_path)
@@ -229,20 +210,73 @@ def store_transcript(meeting_id, meeting_name, meet_url, transcript, date, parti
             VALUES (?, ?, ?, ?, ?, ?)
         """, (meeting_id, meeting_name, meet_url, transcript, date, participants))
         
-        # Store the minutes file link in the database
+        # Store the minutes text in the database
         cursor.execute("""
-            INSERT INTO minutes (meeting_id, meeting_name, meet_url, file_link, file_type) 
-            VALUES (?, ?, ?, ?, ?)
-        """, (meeting_id, meeting_name, meet_url, file_link, "doc"))
+            INSERT INTO minutes (meeting_id, meeting_name, meet_url, minutes_text, date, participants) 
+            VALUES (?, ?, ?, ?, ?, ?)
+        """, (meeting_id, meeting_name, meet_url, minutes_text, date, participants))
         
         conn.commit()
         conn.close()
-        print("Transcript and minutes file link stored in the database.")
+        print("Transcript and minutes text stored in the database.")
     except Exception as e:
         print(f"Error storing transcript and minutes: {e}")
 
+# API Endpoint to fetch all minutes
+@app.route('/api/minutes', methods=['GET'])
+def get_all_minutes():
+    """Fetch all minutes from the database."""
+    try:
+        conn = sqlite3.connect(db_path)
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM minutes")
+        minutes = cursor.fetchall()
+        conn.close()
+
+        # Convert to a list of dictionaries
+        minutes_list = []
+        for minute in minutes:
+            minutes_list.append({
+                "id": minute[0],
+                "meeting_id": minute[1],
+                "meeting_name": minute[2],
+                "meet_url": minute[3],
+                "minutes_text": minute[4],
+                "date": minute[5],          # Include date in the response
+                "participants": minute[6]   # Include participants in the response
+            })
+        return jsonify(minutes_list)
+    except Exception as e:
+        print(f"Error fetching minutes: {e}")
+        return jsonify({"error": str(e)}), 500
+
+# API Endpoint to update minutes
+@app.route('/api/update-minutes', methods=['POST'])
+def update_minutes():
+    """Update minutes text in the database."""
+    data = request.json
+    meeting_id = data.get("meeting_id")
+    updated_minutes = data.get("minutes_text")
+
+    if not meeting_id or not updated_minutes:
+        return jsonify({"error": "Missing required fields"}), 400
+
+    try:
+        conn = sqlite3.connect(db_path)
+        cursor = conn.cursor()
+        cursor.execute("""
+            UPDATE minutes SET minutes_text = ? WHERE meeting_id = ?
+        """, (updated_minutes, meeting_id))
+        conn.commit()
+        conn.close()
+        return jsonify({"status": "Minutes updated successfully"})
+    except Exception as e:
+        print(f"Error updating minutes: {e}")
+        return jsonify({"error": str(e)}), 500
+
+# API Endpoint to start a new meeting
 @app.route('/start-meet', methods=['POST'])
-def handle_meet():
+def handle_start_meeting():
     """API endpoint to receive Meet link and start transcript extraction."""
     data = request.json
     print("Received data:", data)  # Debugging: Print the request data
@@ -261,31 +295,44 @@ def handle_meet():
     start_meeting(meeting_id, meeting_name, meet_url, participants)
     return jsonify({"status": "Meeting started"})
 
+# API Endpoint to download minutes (optional, not used in this implementation)
 @app.route('/download-minutes/<meeting_id>', methods=['GET'])
 def download_minutes(meeting_id):
-    """Download minutes file (.doc) for a given meeting ID."""
+    """Download minutes text for a given meeting ID."""
     try:
         conn = sqlite3.connect(db_path)
         cursor = conn.cursor()
         cursor.execute("""
-            SELECT file_link FROM minutes WHERE meeting_id = ?
+            SELECT minutes_text FROM minutes WHERE meeting_id = ?
         """, (meeting_id,))
         result = cursor.fetchone()
         conn.close()
 
         if result:
-            file_link = result[0]
-            if os.path.exists(file_link):
-                # Serve the file from the local directory
-                return send_from_directory(
-                    directory=os.path.dirname(file_link),
-                    path=os.path.basename(file_link),
-                    as_attachment=True
-                )
-            else:
-                return jsonify({"error": "File not found"}), 404
+            minutes_text = result[0]
+            return jsonify({"minutes_text": minutes_text})
         return jsonify({"error": "Minutes not found"}), 404
     except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+# API Endpoint to send minutes via email
+@app.route('/api/send-minutes', methods=['POST'])
+def send_minutes():
+    """Send minutes to participants via email."""
+    data = request.json
+    meeting_id = data.get("meeting_id")
+    participants = data.get("participants")
+    minutes_text = data.get("minutes_text")
+
+    if not all([meeting_id, participants, minutes_text]):
+        return jsonify({"error": "Missing required fields"}), 400
+
+    try:
+        # Call the function from send.py
+        send_minutes_to_participants(meeting_id, participants, minutes_text)
+        return jsonify({"status": "Minutes sent successfully"})
+    except Exception as e:
+        print(f"Error sending minutes: {e}")
         return jsonify({"error": str(e)}), 500
 
 if __name__ == "__main__":
