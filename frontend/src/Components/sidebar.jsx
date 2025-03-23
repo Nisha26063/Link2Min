@@ -58,6 +58,11 @@ const Sidebar = ({ isSidebarVisible }) => {
           <span className="count">21</span>
         </li>
         <li className="listbtn">
+          <FaRegFileAlt className="icon" />
+          <button className="sidebarbtn">Important</button>
+          <span className="count">21</span>
+        </li>
+        <li className="listbtn">
           <FaPlus className="icon"/>
           <button className="sidebarbtn" onClick={handleMeeting}>Start Meeting</button>
         </li>
