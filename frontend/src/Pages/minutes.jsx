@@ -122,7 +122,7 @@ const Minutes = () => {
                       editableMinutes[minute.meeting_id]
                     )
                   }
-                  className="send-button"
+                  className="save-button"
                 >
                   Send
                 </button>

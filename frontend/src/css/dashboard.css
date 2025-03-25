@@ -31,6 +31,14 @@
 .sidebar.hidden {
     transform: translateX(-100%);
 }
+
+
+.sidebarbtn{
+    width:150px;
+    height: 30px;
+    text-align: left;
+
+}
   
   
 /* Default: When sidebar is visible */

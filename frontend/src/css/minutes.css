@@ -31,6 +31,8 @@ th, td {
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  margin-left: 5px;
+
 }
 
 .save-button:hover {
