@@ -2,6 +2,9 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 import datetime
 import pytz
+import datetime
+import pickle
+import os.path
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from google_auth_oauthlib.flow import InstalledAppFlow
@@ -11,6 +14,7 @@ import os.path
 from base64 import urlsafe_b64encode
 from email.mime.text import MIMEText
 from database import initialize_database, save_to_database
+import pytz  # For timezone handling
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}}) # Enable CORS for frontend communication
@@ -36,13 +40,12 @@ def authenticate_google_api():
             creds = flow.run_local_server(port=0)
         with open('token.pickle', 'wb') as token:
             pickle.dump(creds, token)
-    
     calendar_service = build('calendar', 'v3', credentials=creds)
     gmail_service = build('gmail', 'v1', credentials=creds)
     return calendar_service, gmail_service
 
 def create_google_meet_event(service, event_summary, start_datetime, end_datetime, attendees):
-    """Create a Google Meet event and return its link."""
+    """Create a Google Meet event and return its details."""
     event = {
         'summary': event_summary,
         'start': {'dateTime': start_datetime, 'timeZone': 'Asia/Kolkata'},
@@ -55,22 +58,28 @@ def create_google_meet_event(service, event_summary, start_datetime, end_datetim
             },
         },
     }
+
+    # Insert the event
     event = service.events().insert(
         calendarId='primary',
         conferenceDataVersion=1,
         body=event
     ).execute()
+    print("Google Meet link created:", event.get('hangoutLink'))
     return event.get('hangoutLink')
 
 def send_email_via_gmail(service, sender_email, recipient_emails, subject, body):
-    """Send an email with the meeting invitation."""
+    """Send an email with the specified subject and body."""
     for recipient in recipient_emails:
         message = MIMEText(body)
         message['to'] = recipient.strip()
         message['from'] = sender_email
         message['subject'] = subject
+
+        # Encode the message
         raw_message = urlsafe_b64encode(message.as_bytes()).decode()
 
+        # Send the email
         service.users().messages().send(
             userId='me',
             body={'raw': raw_message}
