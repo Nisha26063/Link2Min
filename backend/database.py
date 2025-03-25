@@ -54,3 +54,4 @@ def save_email_to_database(subject, sender, date, body):
     conn.close()
     print("Email details saved to database.")
 
+
