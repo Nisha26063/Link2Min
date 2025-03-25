@@ -29,7 +29,7 @@ const Sidebar = ({ isSidebarVisible }) => {
 
   return (
     <aside className={`sidebar ${isSidebarVisible ? "visible" : "hidden"}`}>
-      <button className="compose-btn" onClick={handleCompose}>
+      <button className="compose-btn sidebarbtn" onClick={handleCompose}>
         <FaPen className="icon compose" /> Compose
       </button>
       <ul className="sidebar-menu">

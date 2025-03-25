@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from './Pages/login';
 import Dashboard from './Pages/dashboard';
 import Schedule from './Pages/schedule';
-import { Minutes } from './Pages/minutes';
+import Minutes from './Pages/minutes'; // Import the Minutes component
 import { Meeting } from './Pages/meeting';
 import ComposeEmail from './Components/compose';
 import Layout from './Components/Layout';
