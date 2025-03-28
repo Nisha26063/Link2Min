@@ -7,6 +7,7 @@ import Minutes from './Pages/minutes'; // Import the Minutes component
 import { Meeting } from './Pages/meeting';
 import ComposeEmail from './Components/compose';
 import Layout from './Components/Layout';
+import Important from './Pages/important';
 
 function App() {
   return (
@@ -32,6 +33,11 @@ function App() {
         <Route path="/dashboard/compose" element={
           <Layout>
             <ComposeEmail />
+          </Layout>
+        } />
+        <Route path="/dashboard/important" element={
+          <Layout>
+            <Important />
           </Layout>
         } />
       </Routes>
