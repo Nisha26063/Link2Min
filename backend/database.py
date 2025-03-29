@@ -20,19 +20,7 @@ def initialize_database():
     conn.commit()
     conn.close()
 
-def initialize_mails_database():
-    """Initialize the SQLite database and create the emails table if it doesn't exist."""
-    conn = sqlite3.connect(MAILS_DB_FILE)
-    cursor = conn.cursor()
-    cursor.execute('''CREATE TABLE IF NOT EXISTS emails (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        subject TEXT,
-        sender TEXT,
-        date TEXT,
-        body TEXT
-    )''')
-    conn.commit()
-    conn.close()
+
 
 def save_to_database(title, date, start_time, end_time, attendees, meet_link):
     """Save meeting details to the meetings database."""
@@ -44,14 +32,39 @@ def save_to_database(title, date, start_time, end_time, attendees, meet_link):
     conn.close()
     print("Meeting details saved to database.")
 
-def save_email_to_database(subject, sender, date, body):
-    """Save email details to the mails database."""
-    conn = sqlite3.connect(MAILS_DB_FILE)
+# database.py
+import sqlite3
+
+def initialize_mails_database():
+    """Create the emails table if it doesn't exist"""
+    conn = sqlite3.connect('mails.db')
     cursor = conn.cursor()
-    cursor.execute('''INSERT INTO emails (subject, sender, date, body)
-        VALUES (?, ?, ?, ?)''', (subject, sender, date, body))
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS emails (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            subject TEXT,
+            sender TEXT,
+            date TEXT,
+            body TEXT,
+            important INTEGER DEFAULT 0
+        )
+    ''')
     conn.commit()
     conn.close()
-    print("Email details saved to database.")
+
+def save_email_to_database(subject, sender, date, body, important):
+    """Save email with classification to database"""
+    conn = sqlite3.connect('mails.db')
+    cursor = conn.cursor()
+    try:
+        cursor.execute('''
+            INSERT INTO emails (subject, sender, date, body, important)
+            VALUES (?, ?, ?, ?, ?)
+        ''', (subject, sender, date, body, important))
+        conn.commit()
+    except sqlite3.Error as e:
+        print(f"Database error: {e}")
+    finally:
+        conn.close()
 
 
