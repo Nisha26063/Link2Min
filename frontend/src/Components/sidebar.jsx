@@ -27,6 +27,10 @@ const Sidebar = ({ isSidebarVisible }) => {
     navigate("/dashboard/compose");
   };
 
+  const handleImportant = () => {
+    navigate("/dashboard/important");
+  };
+
   return (
     <aside className={`sidebar ${isSidebarVisible ? "visible" : "hidden"}`}>
       <button className="compose-btn sidebarbtn" onClick={handleCompose}>
@@ -69,6 +73,10 @@ const Sidebar = ({ isSidebarVisible }) => {
         <li className="listbtn">
           <FaClock className="icon"/>
           <button className="sidebarbtn" onClick={handleMinutes}>Minutes</button>
+        </li>
+        <li className="listbtn">
+          <FaClock className="icon"/>
+          <button className="sidebarbtn" onClick={handleImportant}>Important</button>
         </li>
       </ul>
     </aside>
