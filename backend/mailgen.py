@@ -9,7 +9,7 @@ from google.auth.transport.requests import Request
 from database import initialize_mails_database, save_email_to_database
 
 # 🔹 Configuration
-API_URL = "https://9c4b-34-125-18-83.ngrok-free.app/classify"  # Replace with your Colab API URL
+API_URL = "https://495c-34-87-43-39.ngrok-free.app/classify"  # Replace with your Colab API URL
 SCOPES = ['https://www.googleapis.com/auth/gmail.readonly']
 
 # 🔹 Classify email using only the subject

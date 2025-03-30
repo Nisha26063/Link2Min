@@ -19,5 +19,18 @@ def get_important_emails():
 def fetch_important_emails():
     return jsonify({"emails": get_important_emails()})
 
+# fetch all emails --------------------------------------
+@app.route("/emails", methods=["GET"])
+def fetch_all_emails():
+    db_path = os.path.abspath("mails.db")
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+    cursor.execute("SELECT subject, sender, date FROM emails")  # Fetch all emails
+    emails = cursor.fetchall()
+    conn.close()
+    return jsonify({"emails": [{"subject": row[0], "sender": row[1], "date": row[2]} for row in emails]})
+
+# --------------------------------------------
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5002)
