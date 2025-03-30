@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaStar } from "react-icons/fa";
 import "../css/mailbox.css";
 
@@ -14,6 +14,18 @@ const initialEmails = [
 
 export const Mailbox = () => {
   const [emails, setEmails] = useState(initialEmails);
+
+
+  useEffect(
+    ()=>{
+      fetch("http://localhost:5002")
+      .then((response)=> response.json())
+      .then((data)=>{
+        console.log(data);
+      })
+
+    },[]
+  );
 
   // Function to toggle star
   const toggleStar = (index) => {
