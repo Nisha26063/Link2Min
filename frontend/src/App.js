@@ -63,6 +63,16 @@ function App() {
             </ProtectedRoute>
           } 
         />
+        <Route 
+          path="/dashboard/important" 
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <Important />
+              </Layout>
+            </ProtectedRoute>
+          } 
+        />
       </Routes>
     </Router>
   );
