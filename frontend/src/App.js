@@ -7,6 +7,7 @@ import Minutes from './Pages/minutes'; // Import the Minutes component
 import { Meeting } from './Pages/meeting';
 import ComposeEmail from './Components/compose';
 import Layout from './Components/Layout';
+import ProtectedRoute from './Components/ProtectedRoute';
 import Important from './Pages/important';
 
 function App() {
@@ -14,32 +15,64 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<Login />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/dashboard/schedule" element={
-          <Layout>
-            <Schedule />
-          </Layout>
-        } />
-        <Route path="/dashboard/minutes" element={
-          <Layout>
-            <Minutes /> {/* Add the Minutes component here */}
-          </Layout>
-        } />
-        <Route path="/dashboard/meeting" element={
-          <Layout>
-            <Meeting />
-          </Layout>
-        } />
-        <Route path="/dashboard/compose" element={
-          <Layout>
-            <ComposeEmail />
-          </Layout>
-        } />
-        <Route path="/dashboard/important" element={
-          <Layout>
-            <Important />
-          </Layout>
-        } />
+        <Route 
+          path="/dashboard" 
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/dashboard/schedule" 
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <Schedule />
+              </Layout>
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/dashboard/minutes" 
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <Minutes />
+              </Layout>
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/dashboard/meeting" 
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <Meeting />
+              </Layout>
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/dashboard/compose" 
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <ComposeEmail />
+              </Layout>
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/dashboard/important" 
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <Important />
+              </Layout>
+            </ProtectedRoute>
+          } 
+        />
       </Routes>
     </Router>
   );

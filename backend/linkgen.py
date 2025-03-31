@@ -1,3 +1,7 @@
+from flask import Flask, request, jsonify
+from flask_cors import CORS
+import datetime
+import pytz
 import datetime
 import pickle
 import os.path
@@ -5,17 +9,23 @@ from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
+import pickle
+import os.path
 from base64 import urlsafe_b64encode
 from email.mime.text import MIMEText
+from database import initialize_database, save_to_database
 import pytz  # For timezone handling
-from database import initialize_database, save_to_database  # Import database functions
 
-# Define scopes for both Calendar and Gmail APIs
+app = Flask(__name__)
+CORS(app, resources={r"/*": {"origins": "*"}}) # Enable CORS for frontend communication
+
 SCOPES = [
+    'https://www.googleapis.com/auth/calendar.events',
     'https://www.googleapis.com/auth/calendar',
     'https://www.googleapis.com/auth/gmail.send',
     'https://www.googleapis.com/auth/gmail.readonly'
 ]
+
 
 def authenticate_google_api():
     """Authenticate and return service objects for Calendar and Gmail APIs."""
@@ -76,47 +86,40 @@ def send_email_via_gmail(service, sender_email, recipient_emails, subject, body)
             userId='me',
             body={'raw': raw_message}
         ).execute()
-    print("Email sent successfully.")
 
-def main():
-    # Initialize the database
-    initialize_database()
-    
-    # Authenticate APIs
-    calendar_service, gmail_service = authenticate_google_api()
+@app.route('/create_meeting', methods=['POST'])
+def create_meeting():
+    """API endpoint to create a Google Meet meeting."""
+    try:
+        initialize_database()
+        data = request.json
+        title = data.get("title")
+        date = data.get("date")
+        start_time = data.get("startTime")
+        end_time = data.get("endTime")
+        participants = data.get("participants", [])
 
-    # Input meeting details
-    event_summary = input("Enter the meeting title: ")
-    date = input("Enter the meeting date (YYYY-MM-DD): ")
-    start_time = input("Enter the start time (HH:MM, 24-hour format): ")
-    end_time = input("Enter the end time (HH:MM, 24-hour format): ")
+        ist_timezone = pytz.timezone('Asia/Kolkata')
+        start_datetime = ist_timezone.localize(datetime.datetime.strptime(f"{date} {start_time}", "%Y-%m-%d %H:%M"))
+        end_datetime = ist_timezone.localize(datetime.datetime.strptime(f"{date} {end_time}", "%Y-%m-%d %H:%M"))
 
-    # Parse start and end times in IST
-    ist_timezone = pytz.timezone('Asia/Kolkata')
-    start_datetime = ist_timezone.localize(datetime.datetime.strptime(f"{date} {start_time}", "%Y-%m-%d %H:%M"))
-    end_datetime = ist_timezone.localize(datetime.datetime.strptime(f"{date} {end_time}", "%Y-%m-%d %H:%M"))
+        calendar_service, gmail_service = authenticate_google_api()
+        meet_link = create_google_meet_event(
+            calendar_service, title, start_datetime.isoformat(), end_datetime.isoformat(), participants
+        )
 
-    attendees = input("Enter the participants' email addresses (comma-separated): ").split(',')
+        save_to_database(title, date, start_time, end_time, participants, meet_link)
 
-    # Create Google Meet event
-    gmeet_link = create_google_meet_event(
-        calendar_service,
-        event_summary,
-        start_datetime.isoformat(),
-        end_datetime.isoformat(),
-        attendees
-    )
+        sender_email = "your_email@gmail.com"
+        subject = f"Invitation to {title}"
+        body = f"Dear Participant,\n\nYou are invited to {title}.\nGoogle Meet Link: {meet_link}\n\nBest regards."
 
-    # Save meeting details to the database
-    save_to_database(event_summary, date, start_time, end_time, attendees, gmeet_link)
+        send_email_via_gmail(gmail_service, sender_email, participants, subject, body)
 
-    # Email details
-    sender_email = "your_email@gmail.com"
-    subject = f"Invitation to {event_summary}"
-    body = f"Dear Participant,\n\nYou are invited to the meeting: {event_summary}.\nGoogle Meet Link: {gmeet_link}\n\nBest regards."
+        return jsonify({"message": "Meeting created successfully", "meet_link": meet_link})
 
-    # Send the email
-    send_email_via_gmail(gmail_service, sender_email, attendees, subject, body)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 if __name__ == '__main__':
-    main()
+    app.run(debug=True, port=5001)

@@ -1,4 +1,5 @@
 token.pickle
 credentials.json
 .eventid
+backend/.env
 .env

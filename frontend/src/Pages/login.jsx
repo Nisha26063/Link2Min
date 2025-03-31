@@ -1,43 +1,78 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import '../css/login.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
-
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const Login = () => {
-    const [isSignUp, setIsSignUp] = useState(false);
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
+    const navigate = useNavigate();
+    const location = useLocation();
 
-    const handleToggle = () => {
-        setIsSignUp(!isSignUp);
+    useEffect(() => {
+        const query = new URLSearchParams(location.search);
+        const token = query.get("token");
+        if (token) {
+            console.log("Token found:", token); // Debug
+            localStorage.setItem('isAuthenticated', 'true');
+            localStorage.setItem('authToken', token);
+            navigate('/dashboard', { replace: true }); // Replace to avoid back-button issues
+        }
+    }, [location, navigate]);
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        const validEmail = "user@example.com";
+        const validPassword = "password123";
+        if (email === validEmail && password === validPassword) {
+            localStorage.setItem('isAuthenticated', 'true');
+            navigate('/dashboard');
+        } else {
+            setError('Invalid email or password');
+        }
     };
 
     const handleGoogleLogin = () => {
-        console.log("Google Login Clicked!");
+        window.location.href = "http://localhost:5000/auth/google";
     };
 
     return (
-        
         <div className="login-container">
-
             <div className="login-box">
-                <h1 className="logo-text">{isSignUp ? "Create your account" : "Sign in"}</h1>
-                <form className="login-form">
+                <h1 className="logo-text">Sign in</h1>
+                {error && <p style={{ color: 'red' }}>{error}</p>}
+                <form className="login-form" onSubmit={handleSubmit}>
                     <div className="form-group">
-                        <input type="text" placeholder="Email" required />
+                        <input 
+                            type="email" 
+                            placeholder="Email" 
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            required 
+                        />
                     </div>
                     <div className="form-group">
-                        <input type="password" placeholder="Password" required />
+                        <input 
+                            type="password" 
+                            placeholder="Password" 
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            required 
+                        />
                     </div>
                     <button type="submit" className="submit-button">
-                        {isSignUp ? "Sign Up" : "Next"}
+                        Sign In
                     </button>
                     <div className="form-group google-login-group">
-                        <button className="google-button" onClick={handleGoogleLogin}>
+                        <button 
+                            type="button"
+                            className="google-button" 
+                            onClick={handleGoogleLogin}
+                        >
                             <i className="fab fa-google google-icon"></i> Continue with Google
                         </button>
                     </div>
-                    <p className="toggle-text" onClick={handleToggle}>
-                        {isSignUp ? "Already have an account? Sign in" : "Create an account"}
-                    </p>
                 </form>
             </div>
         </div>
