@@ -3,3 +3,5 @@ credentials.json
 .eventid
 backend/.env
 .env
+backend/token.json
+token.json
