@@ -38,6 +38,7 @@ const Login = () => {
     };
 
     return (
+        <div className="bg">
         <div className="login-container">
             <div className="login-box">
                 <h1 className="logo-text">Sign in</h1>
@@ -75,6 +76,7 @@ const Login = () => {
                     </div>
                 </form>
             </div>
+        </div>
         </div>
     );
 };

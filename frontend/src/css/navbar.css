@@ -8,8 +8,8 @@
   justify-content: space-between;
   align-items: center;
   padding: 12px 20px;
-  background-color: #f6f8fc;
-  border-bottom: 1px solid #ddd;
+  background: linear-gradient(135deg, #1a73e8 0%, #0d47a1 100%);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
   
   /* Left section: Gmail logo & menu */
@@ -22,23 +22,25 @@
   .gmail-logo {
     font-size: 18px;
     font-weight: 600;
-    color: #171818;
+    color: #ffffff;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
   }
   
   /* Center section: Search bar */
   .search-container {
     display: flex;
     align-items: center;
-    background: white;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
     border-radius: 24px;
     padding: 6px 12px;
     width: 50%;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   }
   
   .search-icon,
   .filter-icon {
-    color: #5f6368;
+    color: #ffffff;
     font-size: 16px;
     cursor: pointer;
   }
@@ -50,6 +52,11 @@
     font-size: 14px;
     padding: 4px 8px;
     background: transparent;
+    color: #ffffff;
+  }
+  
+  .search-input::placeholder {
+    color: rgba(255, 255, 255, 0.7);
   }
   
   /* Right section: Icons & profile */
@@ -61,13 +68,14 @@
   
   .icon {
     font-size: 18px;
-    color: #5f6368;
+    color: #ffffff;
     cursor: pointer;
     transition: 0.2s;
   }
   
   .icon:hover {
-    color: black;
+    color: rgba(255, 255, 255, 0.8);
+    transform: scale(1.1);
   }
   
   .sparkle-icon {
@@ -82,5 +90,12 @@
     height: 32px;
     border-radius: 50%;
     cursor: pointer;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    transition: 0.2s;
+  }
+  
+  .profile-pic:hover {
+    border-color: #ffffff;
+    transform: scale(1.05);
   }
   

@@ -1,160 +1,206 @@
+:root {
+    --primary-blue: #2196f3;
+    --soft-blue: #e3f2fd;
+    --sidebar-bg: linear-gradient(135deg, #2b4c7d 0%, #333b4b 100%);
+    --navbar-bg: linear-gradient(135deg, #1976d2 0%, #577496 100%);
+    --text-dark: #2c3e50;
+    --text-medium: #546e7a;
+    --border-light: rgba(255, 255, 255, 0.1);
+    --compose-btn: linear-gradient(135deg, #42a5f5 0%, #2196f3 100%);
+}
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Poppins','Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS';
+    font-family: 'Poppins', 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS';
 }
 
 .gmail-container {
     display: flex;
     min-height: 100vh;
-    width: 100%;  /* Change from 100vw to 100% */
-    padding-top: 60px; /* Space for navbar */
-    overflow-x: hidden; /* Prevent horizontal scroll */
-    overflow-y: hidden;
+    width: 100%;
+    padding-top: 60px;
+    overflow-x: hidden;
 }
-  
-/* 📌 Sidebar with smooth toggle */
+
+/* Sidebar */
 .sidebar {
     width: 250px;
     min-width: 250px;
-    height: calc(100vh - 60px); /* Subtract navbar height */
-    background-color: #f1f1f1;
-    transition: transform 0.3s ease-in-out;
+    height: calc(100vh - 60px);
+    background: var(--sidebar-bg);
+    transition: all 0.3s ease-in-out;
     position: fixed;
     left: 0;
-    top: 60px; /* Below Navbar */
+    top: 60px;
     z-index: 900;
-    margin-top: 10px;
+    margin-top: 1px;
+    border-right: 1px solid var(--border-light);
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.15);
 }
-/* 📌 Hide sidebar when toggled */
+
 .sidebar.hidden {
     transform: translateX(-100%);
 }
 
-
-.sidebarbtn{
-    width:150px;
+.sidebarbtn {
+    width: 140px;
     height: 30px;
     text-align: left;
-
-}
-  
-  
-/* Default: When sidebar is visible */
-.mailbox-container {
-    flex-grow: 1;
-    margin-left: 250px; /* Match exactly the sidebar width */
-    padding: 0; /* Remove any padding */
-    transition: margin-left 0.3s ease-in-out;
-    overflow-x: hidden;
-    width: calc(100% - 250px);
-    box-sizing: border-box;
-    display: flex; /* Use flexbox */
+    border: none;
+    font-weight: 500;
+    border-radius: 8px;
+    font-size: 15px;
+    color: rgba(255, 255, 255, 0.8);
+    padding: 4px;
+    background: transparent;
+    transition: all 0.2s ease;
 }
 
-/* When sidebar is hidden */
-.sidebar.hidden + .mailbox-container {
-    margin-left: 0;
-    width: 100%;
+.sidebarbtn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
 }
-
-  
-  /* Ensure Mailbox content stretches */
-  .mailbox {
-    width: 100%;
-    height: 100%;
-  }
-  
 
 .compose-btn {
-    width: 100%;
-    background: #c2e7ff;
-    color: #333;
+    width: 120px;
+    background: linear-gradient(135deg, #42a5f5 0%, #2196f3 100%);
+    color: white;
     border: none;
-    padding: 10px 15px;
+    padding: 12px 16px;
     border-radius: 20px;
     display: flex;
     align-items: center;
     font-size: 14px;
     cursor: pointer;
-    margin-bottom: 10px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    margin-left: 20px;
+    margin-top: 10px;
+    height: 45px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
-.compose-btn .icon {
-    margin-right: 8px;
+.compose-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(33, 150, 243, 0.4);
+    background: linear-gradient(135deg, #64b5f6 0%, #42a5f5 100%);
 }
 
 .sidebar-menu {
     list-style: none;
-    flex-grow: 1; /* Pushes sidebar items to take space */
+    flex-grow: 1;
+    padding: 10px;
 }
-
 
 .sidebar-menu li {
     padding: 10px;
     display: flex;
     align-items: center;
     cursor: pointer;
-    color: #444;
+    color: rgba(255, 255, 255, 0.8);
+    transition: all 0.2s ease;
+    border-radius: 8px;
+    margin: 2px 8px;
+}
+
+.sidebar-menu li.active {
+    background: rgba(255, 255, 255, 0.15);
+    color: #ffffff;
+    font-weight: 500;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar-menu li:hover:not(.active) {
+    background: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
 }
 
 .sidebar-menu li .icon {
     margin-right: 10px;
     font-size: 16px;
+    color: rgba(255, 255, 255, 0.8);
 }
 
-.sidebar-menu li.active {
-    background: #d2e3fc;
-    font-weight: bold;
-    border-radius: 8px;
+.sidebar-menu li.active .icon {
+    color: #ffffff;
 }
-
-.sidebarbtn
-{
-    border: none;
-    font-weight: bold;
-    border-radius: 8px;
-    font-size: 15px;
-}
-
-.listbtn:hover {
-    background: #dee4e7;
-
-    button {
-        background: inherit;
-    }
-}
-
-
 
 .count {
     margin-left: auto;
-    background: #e8eaed;
+    background: rgba(255, 255, 255, 0.1);
     padding: 2px 6px;
     border-radius: 10px;
     font-size: 12px;
+    color: rgba(255, 255, 255, 0.9);
 }
 
-/* Special class for mailbox container when it needs to be flush with sidebar */
-.mailbox-container.flush-sidebar {
+/* Main Content Area */
+.mailbox-container {
+    flex-grow: 1;
     margin-left: 250px;
     padding: 0;
+    transition: margin-left 0.3s ease-in-out;
     overflow-x: hidden;
     width: calc(100% - 250px);
     box-sizing: border-box;
+    display: flex;
 }
 
-/* When sidebar is hidden, adjust the flush-sidebar container */
-.sidebar.hidden + .mailbox-container.flush-sidebar {
+.sidebar.hidden + .mailbox-container {
     margin-left: 0;
     width: 100%;
 }
 
-/* For other pages, add padding */
-.layout-page-content {
-    padding: 20px;
+/* Email List Styling */
+.mail-list {
+    background: #ffffff;
+    border-radius: 8px;
+    margin: 16px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    width: 100%;
 }
 
+.email-item {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border-light);
+    transition: background 0.2s ease;
+    display: flex;
+    align-items: center;
+}
 
+.email-item:hover {
+    background: rgba(0, 0, 0, 0.03);
+}
 
+.email-subject {
+    color: var(--text-dark);
+    font-weight: 500;
+    margin-left: 15px;
+}
+
+.email-preview {
+    color: var(--text-medium);
+    font-size: 0.9em;
+    margin-left: auto;
+    max-width: 50%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Navbar */
+.navbar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 60px;
+    background: var(--navbar-bg);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    color: white;
+}

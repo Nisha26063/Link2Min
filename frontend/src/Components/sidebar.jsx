@@ -1,5 +1,5 @@
 import React from "react";
-import { FaPen, FaRegPaperPlane, FaRegFileAlt, FaPlus, FaAddressBook, FaClock } from "react-icons/fa";
+import { FaPen,  FaRegFileAlt, FaPlus, FaAddressBook, FaClock } from "react-icons/fa";
 import { MdInbox } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import "../css/dashboard.css";
@@ -30,7 +30,7 @@ const Sidebar = ({ isSidebarVisible }) => {
   return (
     <aside className={`sidebar ${isSidebarVisible ? "visible" : "hidden"}`}>
       <button className="compose-btn sidebarbtn" onClick={handleCompose}>
-        <FaPen className="icon compose" /> Compose
+        <FaPen className="icon compose" />Compose
       </button>
       <ul className="sidebar-menu">
 
@@ -47,16 +47,6 @@ const Sidebar = ({ isSidebarVisible }) => {
           <button className="sidebarbtn" onClick={handleSchedule}>Schedule</button>
         </li>
 
-
-        <li className="listbtn">
-          <FaRegPaperPlane className="icon" />
-          <button className="sidebarbtn">Sent</button>
-        </li>
-        <li className="listbtn">
-          <FaRegFileAlt className="icon" />
-          <button className="sidebarbtn">Drafts</button>
-          <span className="count">21</span>
-        </li>
         <li className="listbtn">
           <FaRegFileAlt className="icon" />
           <button className="sidebarbtn">Important</button>
