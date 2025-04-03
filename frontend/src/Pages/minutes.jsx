@@ -8,28 +8,30 @@ const Minutes = () => {
   const [loading, setLoading] = useState(true); // State to track loading status
   const [error, setError] = useState(null); // State to track errors
 
-  // Fetch all minutes from the backend
+  const [modalOpen, setModalOpen] = useState(false); // Controls modal visibility
+  const [currentMinuteId, setCurrentMinuteId] = useState(null); // Track which meeting is open in modal
+  const [modalText, setModalText] = useState(""); // Text inside the modal
+
   useEffect(() => {
-    axios.get("http://127.0.0.1:5000/api/minutes")
+    axios
+      .get("http://127.0.0.1:5000/api/minutes")
       .then((response) => {
-        console.log("Fetched minutes:", response.data); // Debugging
+        console.log("Fetched minutes:", response.data);
         setMinutes(response.data);
-        // Initialize editableMinutes with the fetched minutes text
         const initialEditableMinutes = {};
         response.data.forEach((minute) => {
           initialEditableMinutes[minute.meeting_id] = minute.minutes_text;
         });
         setEditableMinutes(initialEditableMinutes);
-        setLoading(false); // Data fetching is complete
+        setLoading(false);
       })
       .catch((error) => {
         console.error("Error fetching minutes:", error);
         setError("Failed to fetch minutes. Please try again later.");
-        setLoading(false); // Data fetching failed
+        setLoading(false);
       });
   }, []);
 
-  // Handle changes to the editable text box
   const handleMinutesChange = (meetingId, newText) => {
     setEditableMinutes({
       ...editableMinutes,
@@ -37,45 +39,50 @@ const Minutes = () => {
     });
   };
 
-  // Handle saving the updated minutes
-  const handleSaveMinutes = (meetingId) => {
-    const updatedMinutes = editableMinutes[meetingId];
-    axios.post("http://127.0.0.1:5000/api/update-minutes", {
-      meeting_id: meetingId,
-      minutes_text: updatedMinutes,
-    })
-    .then((response) => {
-      alert(response.data.status); // Show success message
-    })
-    .catch((error) => {
-      console.error("Error updating minutes:", error);
-      alert("Failed to update minutes.");
-    });
+  const handleSaveMinutes = () => {
+    axios
+      .post("http://127.0.0.1:5000/api/update-minutes", {
+        meeting_id: currentMinuteId,
+        minutes_text: modalText,
+      })
+      .then((response) => {
+        alert(response.data.status);
+        setEditableMinutes((prev) => ({
+          ...prev,
+          [currentMinuteId]: modalText,
+        }));
+        setModalOpen(false);
+      })
+      .catch((error) => {
+        console.error("Error updating minutes:", error);
+        alert("Failed to update minutes.");
+      });
   };
 
-  // Handle sending minutes via email
   const handleSendMinutes = (meetingId, participants, minutesText) => {
-    axios.post("http://127.0.0.1:5000/api/send-minutes", {
-      meeting_id: meetingId,
-      participants: participants,
-      minutes_text: minutesText,
-    })
-    .then((response) => {
-      alert(response.data.status); // Show success message
-    })
-    .catch((error) => {
-      console.error("Error sending minutes:", error);
-      alert("Failed to send minutes.");
-    });
+    axios
+      .post("http://127.0.0.1:5000/api/send-minutes", {
+        meeting_id: meetingId,
+        participants: participants,
+        minutes_text: minutesText,
+      })
+      .then((response) => {
+        alert(response.data.status);
+      })
+      .catch((error) => {
+        console.error("Error sending minutes:", error);
+        alert("Failed to send minutes.");
+      });
   };
 
-  if (loading) {
-    return <div>Loading...</div>; // Show a loading message
-  }
+  const openModal = (meetingId) => {
+    setCurrentMinuteId(meetingId);
+    setModalText(editableMinutes[meetingId] || "");
+    setModalOpen(true);
+  };
 
-  if (error) {
-    return <div>{error}</div>; // Show an error message
-  }
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>{error}</div>;
 
   return (
     <div className="minutes-container">
@@ -101,19 +108,13 @@ const Minutes = () => {
               <td>
                 <textarea
                   value={editableMinutes[minute.meeting_id] || ""}
-                  onChange={(e) =>
-                    handleMinutesChange(minute.meeting_id, e.target.value)
-                  }
+                  readOnly
+                  onClick={() => openModal(minute.meeting_id)}
                   className="minutes-textarea"
                 />
               </td>
               <td>
-                <button
-                  onClick={() => handleSaveMinutes(minute.meeting_id)}
-                  className="save-button"
-                >
-                  Save
-                </button>
+                {/* Removed Save Button Here */}
                 <button
                   onClick={() =>
                     handleSendMinutes(
@@ -131,8 +132,31 @@ const Minutes = () => {
           ))}
         </tbody>
       </table>
+
+      {/* Modal */}
+      {modalOpen && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <h3>Edit Minutes</h3>
+            <textarea
+              className="modal-textarea"
+              value={modalText}
+              onChange={(e) => setModalText(e.target.value)}
+            />
+            <div className="modal-actions">
+              <button onClick={handleSaveMinutes} className="save-button">
+                Save
+              </button>
+              <button onClick={() => setModalOpen(false)} className="cancel-button">
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
 
-export default Minutes; // Default export
+export default Minutes;
+

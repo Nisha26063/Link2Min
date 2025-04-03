@@ -1,3 +1,21 @@
+:root {
+  --primary-blue: #0451af; /* Mid blue */
+  --primary-blue-dark: #0035a8; /* Slightly darker */
+  --sidebar-bg: #1a202c;
+  --content-bg: #ffffff;
+  --text-primary: #1e293b;
+  --text-muted: #64748b;
+  --border-color: #cbd5e0;
+  --table-alt: #eff6ff;
+}
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: var(--content-bg);
+  color: var(--text-primary);
+}
+
 .minutes-container {
   padding: 20px;
   background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
@@ -54,10 +72,13 @@ tr:hover {
   outline: none;
 }
 
+.modal-actions .save-button,
 .save-button {
   padding: 10px 24px;
   background: linear-gradient(135deg, #28a745 0%, #1e7e34 100%);
   color: white;
+  padding: 8px 16px;
+  border-radius: 6px;
   border: none;
   border-radius: 8px;
   cursor: pointer;
@@ -67,6 +88,7 @@ tr:hover {
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
+.modal-actions .save-button:hover,
 .save-button:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);

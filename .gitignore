@@ -2,4 +2,7 @@ token.pickle
 credentials.json
 .eventid
 backend/.env
-backend/.env
+.env
+backend/token.json
+token.jsonbackend/token.json
+backend/token.json

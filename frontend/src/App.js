@@ -8,6 +8,7 @@ import { Meeting } from './Pages/meeting';
 import ComposeEmail from './Components/compose';
 import Layout from './Components/Layout';
 import ProtectedRoute from './Components/ProtectedRoute';
+import Important from './Pages/important';
 
 function App() {
   return (
@@ -58,6 +59,16 @@ function App() {
             <ProtectedRoute>
               <Layout>
                 <ComposeEmail />
+              </Layout>
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/dashboard/important" 
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <Important />
               </Layout>
             </ProtectedRoute>
           } 

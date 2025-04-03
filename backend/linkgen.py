@@ -20,10 +20,12 @@ app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}}) # Enable CORS for frontend communication
 
 SCOPES = [
+    'https://www.googleapis.com/auth/calendar.events',
     'https://www.googleapis.com/auth/calendar',
     'https://www.googleapis.com/auth/gmail.send',
     'https://www.googleapis.com/auth/gmail.readonly'
 ]
+
 
 def authenticate_google_api():
     """Authenticate and return service objects for Calendar and Gmail APIs."""
