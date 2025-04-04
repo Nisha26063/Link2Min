@@ -159,4 +159,3 @@ const Minutes = () => {
 };
 
 export default Minutes;
-

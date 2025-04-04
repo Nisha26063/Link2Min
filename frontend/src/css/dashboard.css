@@ -54,6 +54,7 @@
     font-size: 15px;
     color: rgba(255, 255, 255, 0.8);
     padding: 4px;
+
     background: transparent;
     transition: all 0.2s ease;
 }
@@ -76,8 +77,8 @@
     cursor: pointer;
     font-weight: 500;
     transition: all 0.3s ease;
-    margin-left: 20px;
-    margin-top: 10px;
+    margin-left: 25px;
+    margin-top: 15px;
     height: 45px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }

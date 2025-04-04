@@ -1,94 +1,86 @@
 import React, { useState } from "react";
-import { FaPaperclip, FaSmile, FaTrash, FaBold, FaItalic, FaUnderline, FaImage } from "react-icons/fa";
+import { FaPaperclip, FaSmile, FaTrash, FaBold, FaItalic, FaUnderline,
+FaImage, FaLock, FaPen } from "react-icons/fa";
 import "../css/compose.css";
-import {useNavigate} from "react-router-dom"
 
-const ComposeEmail = () => {
+const ComposeEmail = ({ onClose }) => {
   const [to, setTo] = useState("");
   const [subject, setSubject] = useState("");
   const [message, setMessage] = useState("");
-  const [isBold, setIsBold] = useState(false);
-  const [isItalic, setIsItalic] = useState(false);
-  const [isUnderline, setIsUnderline] = useState(false);
+  const [isSending, setIsSending] = useState(false);
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(false);
 
+  const handleSendEmail = async () => {
+    // Basic validation
+    if (!to || !subject || !message) {
+      setError("Please fill in all fields");
+      return;
+    }
 
-  const navigate = useNavigate();
+    setIsSending(true);
+    setError(null);
+    setSuccess(false);
 
+    try {
+      const response = await fetch('http://localhost:5003/api/send-email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          to,
+          subject,
+          message,
+        }),
+      });
 
-  const insertTextAtCursor = (text) => {
-    const textarea = document.getElementById("editor");
-    if (!textarea) return;
+      // Check if response is JSON
+      const contentType = response.headers.get('content-type');
+      if (!contentType || !contentType.includes('application/json')) {
+        const text = await response.text();
+        throw new Error(text || 'Server returned an unexpected response');
+      }
 
-    const startPos = textarea.selectionStart;
-    const endPos = textarea.selectionEnd;
+      const data = await response.json();
 
-    const beforeText = message.substring(0, startPos);
-    const afterText = message.substring(endPos, message.length);
+      if (!response.ok) {
+        throw new Error(data.error || `Server error: ${response.status}`);
+      }
 
-    setMessage(beforeText + text + afterText);
+      // Success case
+      setSuccess(true);
+      setTo("");
+      setSubject("");
+      setMessage("");
+      setTimeout(() => setSuccess(false), 3000);
+    } catch (err) {
+      // Handle different error cases
+      let errorMessage = err.message;
 
-    setTimeout(() => {
-      textarea.selectionStart = textarea.selectionEnd = startPos + text.length;
-      textarea.focus();
-    }, 0);
-  };
+      if (err.message.includes('Failed to fetch')) {
+        errorMessage = "Could not connect to the server. Please checkyour connection.";
+      } else if (err.message.includes('<!DOCTYPE html>')) {
+        errorMessage = "Server error occurred. Please try again later.";
+      }
 
-  const handleFormatClick = (formatType) => {
-    if (formatType === "bold") {
-      setIsBold(!isBold);
-    } else if (formatType === "italic") {
-      setIsItalic(!isItalic);
-    } else if (formatType === "underline") {
-      setIsUnderline(!isUnderline);
+      setError(errorMessage);
+      console.error('Email sending error:', err);
+    } finally {
+      setIsSending(false);
     }
   };
-
-  const handleFileUpload = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      insertTextAtCursor(` [File: ${file.name}] `);
-      alert("File Uploaded")
-
-    }
-  };
-
-  const handleImageUpload = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      insertTextAtCursor(` ![Image: ${file.name}] `);
-      alert("Image Uploaded")
-    }
-  };
-
-  const handleInsertEmoji = () => {
-    insertTextAtCursor(" 😊 ");
-  };
-
-  const handleClearText = () => {
-    setMessage("");
-    setTo("");
-    setSubject("");
-  };
-
-  const handleSubmit=()=>{
-    alert("Message Send")
-    setMessage("");
-    setTo("");
-    setSubject("");
-    
-  }
-
 
   return (
     <div className="compose-wrapper">
       <div className="compose-container">
         <div className="compose-header">
           <h3>New Mail</h3>
-          <button className="close-btn" onClick={()=>{ navigate("/dashboard")}}>✖</button>
+          <button className="close-btn" onClick={onClose}
+aria-label="Close compose window">
+            ✖
+          </button>
         </div>
-
-
-        <form onSubmit={handleSubmit}>
 
         <div className="compose-body">
           <input
@@ -98,6 +90,7 @@ const ComposeEmail = () => {
             onChange={(e) => setTo(e.target.value)}
             className="compose-input"
             required
+            aria-required="true"
           />
           <input
             type="text"
@@ -105,46 +98,79 @@ const ComposeEmail = () => {
             value={subject}
             onChange={(e) => setSubject(e.target.value)}
             className="compose-input"
+            required
+            aria-required="true"
           />
-
-
           <textarea
-        placeholder="Write your message..."
-        value={message}
-        onChange={(e) => setMessage(e.target.value)}
-        className="compose-textarea"
-        required
-        style={{
-          fontWeight: isBold ? "bold" : "normal",
-          fontStyle: isItalic ? "italic" : "normal",
-          textDecoration: isUnderline ? "underline" : "none",
-        }}
-      />
+            placeholder="Write your message..."
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            className="compose-textarea"
+            required
+            aria-required="true"
+          />
         </div>
+
+        {/* Status messages */}
+        {error && (
+          <div className="error-message" role="alert">
+            {error}
+          </div>
+        )}
+        {success && (
+          <div className="success-message" role="status">
+            Email sent successfully!
+          </div>
+        )}
 
         <div className="compose-toolbar">
-        <FaBold className="toolbar-icon" onClick={() => handleFormatClick("bold")} />
-        <FaItalic className="toolbar-icon" onClick={() => handleFormatClick("italic")} />
-        <FaUnderline className="toolbar-icon" onClick={() => handleFormatClick("underline")} />
-        
-        <label>
-          <FaPaperclip className="toolbar-icon" />
-          <input type="file" style={{ display: "none" }} onChange={handleFileUpload} />
-        </label>
-
-        <label>
-          <FaImage className="toolbar-icon" />
-          <input type="file" accept="image/*" style={{ display: "none" }} onChange={handleImageUpload} />
-        </label>
-
-        <FaSmile className="toolbar-icon" onClick={handleInsertEmoji} />
-        <FaTrash className="toolbar-icon delete" onClick={handleClearText} />
-      </div>
+          <button className="toolbar-button" title="Bold">
+            <FaBold />
+          </button>
+          <button className="toolbar-button" title="Italic">
+            <FaItalic />
+          </button>
+          <button className="toolbar-button" title="Underline">
+            <FaUnderline />
+          </button>
+          <button className="toolbar-button" title="Attach file">
+            <FaPaperclip />
+          </button>
+          <button className="toolbar-button" title="Insert image">
+            <FaImage />
+          </button>
+          <button className="toolbar-button" title="Insert emoji">
+            <FaSmile />
+          </button>
+          <button className="toolbar-button" title="Encrypt">
+            <FaLock />
+          </button>
+          <button className="toolbar-button" title="Signature">
+            <FaPen />
+          </button>
+          <button
+            className="toolbar-button delete"
+            title="Discard"
+            onClick={() => {
+              if (window.confirm("Are you sure you want to discardthis email?")) {
+                onClose();
+              }
+            }}
+          >
+            <FaTrash />
+          </button>
+        </div>
 
         <div className="compose-footer">
-          <button type="submit" className="send-btn">Send</button>
+          <button
+            className="send-btn"
+            onClick={handleSendEmail}
+            disabled={isSending}
+            aria-busy={isSending}
+          >
+            {isSending ? 'Sending...' : 'Send'}
+          </button>
         </div>
-        </form>
       </div>
     </div>
   );

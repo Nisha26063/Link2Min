@@ -11,12 +11,7 @@ const Navbar = ({ toggleSidebar }) => {
         <h1 className="gmail-logo">Link2Min</h1>
       </div>
 
-      {/* Center Section: Search Bar */}
-      <div className="search-container">
-        <FaSearch className="search-icon" />
-        <input type="text" placeholder="Search mail" className="search-input" />
-        <FaFilter className="filter-icon" />
-      </div>
+
 
       {/* Right Section: Icons */}
       <div className="navbar-right">

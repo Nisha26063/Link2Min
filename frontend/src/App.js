@@ -9,6 +9,8 @@ import ComposeEmail from './Components/compose';
 import Layout from './Components/Layout';
 import ProtectedRoute from './Components/ProtectedRoute';
 import Important from './Pages/important';
+import SpamEmails from './Pages/spam';
+import SentEmails from './Pages/sent';
 
 function App() {
   return (
@@ -73,6 +75,22 @@ function App() {
             </ProtectedRoute>
           } 
         />
+        <Route path='/dashboard/spam'
+        element={<ProtectedRoute>
+          <Layout>
+            <SpamEmails />
+          </Layout>
+        </ProtectedRoute>}>
+
+        </Route>
+        <Route path='/dashboard/sent'
+        element={<ProtectedRoute>
+          <Layout>
+            <SentEmails />
+          </Layout>
+        </ProtectedRoute>}>
+
+        </Route>
       </Routes>
     </Router>
   );

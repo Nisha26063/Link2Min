@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { FaStar } from "react-icons/fa";
+
 import "../css/mailbox.css";
 
 export const Mailbox = () => {
@@ -39,14 +39,7 @@ export const Mailbox = () => {
     },[]
   );
 
-  // Function to toggle star
-  const toggleStar = (index) => {
-    setEmails((prevEmails) =>
-      prevEmails.map((email, i) =>
-        i === index ? { ...email, starred: !email.starred } : email
-      )
-    );
-  };
+ 
 
   return (
     <main className="inbox">
@@ -63,10 +56,7 @@ export const Mailbox = () => {
           <li key={index} className="email-item">
             <div className="email-checkbox">
               <input type="checkbox" />
-              <FaStar
-                className={`star ${email.starred ? "starred" : ""}`}
-                onClick={() => toggleStar(index)}
-              />
+ 
             </div>
             <div className="sender">{email.sender}</div>
             <div className="subject">{email.subject}</div>
