@@ -1,10 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { FaStar } from "react-icons/fa";
 import "../css/mailbox.css";
+import { useNavigate } from "react-router-dom";
 
 const SpamEmails = () => {
   const [emails, setEmails] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  let navigate=useNavigate();
+  
+  const handleMail=()=>
+  {
+    navigate("/dashboard/mail")
+  }
 
   useEffect(() => {
     fetch("http://localhost:5002/spam")  // Changed endpoint to /spam
@@ -58,9 +66,9 @@ e.starred).length}</span></span>
                   onClick={() => toggleStar(index)}
                 />
               </div>
-              <div className="sender">{email.sender}</div>
-              <div className="subject">{email.subject}</div>
-              <div className="time">{email.date}</div>
+              <div className="sender" onClick={handleMail}>{email.sender}</div>
+              <div className="subject" onClick={handleMail}>{email.subject}</div>
+              <div className="time" onClick={handleMail}>{email.date}</div>
             </li>
           ))}
         </ul>

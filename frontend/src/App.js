@@ -11,7 +11,7 @@ import ProtectedRoute from './Components/ProtectedRoute';
 import Important from './Pages/important';
 import SpamEmails from './Pages/spam';
 import SentEmails from './Pages/sent';
-
+import Mail from './Components/mail';
 function App() {
   return (
     <Router>
@@ -22,6 +22,14 @@ function App() {
           element={
             <ProtectedRoute>
               <Dashboard />
+              </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/dashboard/mail" 
+          element={
+            <ProtectedRoute>
+              <Mail/>
               </ProtectedRoute>
           } 
         />

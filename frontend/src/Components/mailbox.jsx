@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from "react";
+import {useNavigate} from "react-router-dom"
 
 import "../css/mailbox.css";
 
 export const Mailbox = () => {
   const [emails, setEmails] = useState([]);
 
+  let navigate=useNavigate();
+
   // Function to fetch all emails from backend
-  const fetchEmails = async () => {
+  async function fetchEmails() {
     try {
       const response = await fetch("http://localhost:5002/emails"); // Fetch normal emails
       const data = await response.json();
@@ -14,7 +17,7 @@ export const Mailbox = () => {
     } catch (error) {
       console.error("Error fetching emails:", error);
     }
-  };
+  }
 
   // Fetch emails initially and set up polling
   useEffect(() => {
@@ -39,6 +42,11 @@ export const Mailbox = () => {
     },[]
   );
 
+  const handleMail=()=>
+  {
+    navigate("/dashboard/mail")
+  }
+
  
 
   return (
@@ -58,9 +66,11 @@ export const Mailbox = () => {
               <input type="checkbox" />
  
             </div>
-            <div className="sender">{email.sender}</div>
-            <div className="subject">{email.subject}</div>
-            <div className="time">{email.date}</div>
+
+            <div className="sender" onClick={handleMail}>{email.sender}</div>
+            <div className="subject" onClick={handleMail}>{email.subject}</div>
+            <div className="time" onClick={handleMail}>{email.date}</div>
+
           </li>
         ))}
       </ul>

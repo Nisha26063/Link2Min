@@ -19,6 +19,7 @@
     border-radius: 12px;
     box-shadow: 0 4px 20px rgba(23, 70, 146, 0.08);
     margin: 15px;
+    width: 150vh;
 }
 
 /* Inbox Header */
@@ -27,8 +28,7 @@
     justify-content: space-between;
     align-items: center;
     padding: 15px 20px;
-    background: linear-gradient(135deg, #40668b 0%, #ffffff 100%);
-    border-bottom: 1px solid rgba(37, 99, 235, 0.1);
+    background: linear-gradient(135deg, #9ca7b2 0%, #ffffff 100%);
     border-radius: 12px 12px 0 0;
 }
 
@@ -70,19 +70,16 @@
     margin: 0;
     flex: 1;
     width: 100%;
-    
 }
 
 .email-item {
     display: flex;
     align-items: center;
     padding: 12px 20px;
-    border:0.5px solid;
-    border-radius: 10px;
+    border-bottom: 1px solid rgba(37, 99, 235, 0.05);
     cursor: pointer;
     transition: all 0.2s ease;
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.8) 0%, rgba(248, 250, 252, 0.8) 100%);
-    margin-top: 5px;
 }
 
 .email-item:hover {

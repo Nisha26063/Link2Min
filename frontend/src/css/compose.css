@@ -92,9 +92,7 @@
     justify-content: space-around;
     padding: 12px;
     background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-    border-radius: 8px;
     margin-top: 15px;
-    border: 1px solid rgba(0, 0, 0, 0.05);
     gap: 10px;
 }
   
@@ -174,4 +172,39 @@
     transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
+
+.compose-textarea.editable {
+    border: 1px solid #ccc;
+    min-height: 150px;
+    padding: 10px;
+    border-radius: 4px;
+    outline: none;
+    overflow-y: auto;
+    white-space: pre-wrap;
+    font-family: inherit;
+    font-size: 1rem;
+    margin-top: 8px;
+  }
+  
+
+  .toolbar-button {
+    background: none;
+    border: none;
+    color: #666;
+    cursor: pointer;
+    padding: 6px;
+    font-size: 1.1rem;
+    margin-right: 6px;
+    border-radius: 4px;
+    transition: background 0.2s, color 0.2s;
+  }
+  
+  .toolbar-button:hover {
+    background: #f0f0f0;
+  }
+  
+  .toolbar-button.active {
+    color: #007bff; /* Blue for active state */
+    background: #e6f0ff;
+  }
   

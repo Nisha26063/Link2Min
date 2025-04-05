@@ -1,11 +1,21 @@
 import React, { useEffect, useState } from "react";
 import { FaStar } from "react-icons/fa";
-import "../css/mailbox.css";
+import "../css/sent.css";
+import { useNavigate } from "react-router-dom";
 
 const SentEmails = () => {
   const [emails, setEmails] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  
+  let navigate=useNavigate();
+
+
+  
+  const handleMail=()=>
+    {
+      navigate("/dashboard/mail")
+    }
 
   useEffect(() => {
     const fetchSentEmails = async () => {
@@ -82,9 +92,9 @@ const SentEmails = () => {
                   onClick={() => toggleStar(index)}
                 />
               </div>
-              <div className="sender">To: {email.to}</div>
-              <div className="subject">{email.subject}</div>
-              <div className="time">{email.date}</div>
+              <div className="sender" onClick={handleMail} >To: {email.to}</div>
+              <div className="subject" onClick={handleMail}>{email.subject}</div>
+              <div className="time" onClick={handleMail}>{email.date}</div>
             </li>
           ))}
         </ul>
