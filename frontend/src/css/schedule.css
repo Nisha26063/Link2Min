@@ -73,3 +73,19 @@ tr:hover {
     border-width: 1px;
     padding: 3px;
 }
+
+.start-btn
+{
+    padding: 10px;
+    color: white;
+    font-weight: bold;
+    background-color: rgba(0, 0, 0, 0.793);
+    transition: background-color 0.75s;
+    border-radius: 10px;
+}
+
+.start-btn:hover
+{
+    background-color: #0056b3;
+
+}

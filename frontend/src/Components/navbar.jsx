@@ -1,8 +1,20 @@
 import React from "react";
-import { FaBars, FaSearch, FaFilter } from "react-icons/fa";
+import { FaBars } from "react-icons/fa";
 import "../css/navbar.css";
+import img from "../Assets/amail.png"
+import { useNavigate } from 'react-router-dom';
 
 const Navbar = ({ toggleSidebar }) => {
+
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    // Clear session (e.g., localStorage or auth tokens)
+    localStorage.removeItem('authToken'); 
+
+    // Redirect to login page
+    navigate('/');
+  };
   return (
     <nav className="navbar">
       {/* Left Section: Menu & Gmail Logo */}
@@ -15,7 +27,10 @@ const Navbar = ({ toggleSidebar }) => {
 
       {/* Right Section: Icons */}
       <div className="navbar-right">
-        <img src="https://via.placeholder.com/30" alt="Profile" className="profile-pic" />
+      <button onClick={handleLogout} className="logout-btn">
+      Log out
+      </button>
+      <img src={img} alt="Profile" className="profile-pic" />
       </div>
     </nav>
   );

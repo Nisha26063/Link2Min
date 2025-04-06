@@ -1,0 +1,139 @@
+.mailbox-wrapper {
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  background: linear-gradient(135deg, #f0f4f8 0%, #e8eef5 100%);
+}
+
+.inbox {
+  flex: 1; /* Take full available space */
+  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+  padding: 0; /* Remove all padding */
+  margin: 0; /* Remove all margins */
+  border: none;
+  overflow-y: auto;
+  height: calc(100vh - 60px);
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(23, 70, 146, 0.08);
+  margin: 15px;
+  width: 150vh;
+}
+
+/* Inbox Header */
+.inbox-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  background: linear-gradient(135deg, #a6b9cb 0%, #ffffff 100%);
+  border-bottom: 1px solid rgba(37, 99, 235, 0.1);
+  border-radius: 12px 12px 0 0;
+}
+
+.inbox-header h2 {
+  font-size: 20px;
+  color: #1e40af;
+  font-weight: 600;
+  background: linear-gradient(135deg, #1e40af 0%, #2563eb 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.filter span {
+  margin-right: 15px;
+  font-size: 14px;
+  cursor: pointer;
+  color: #64748b;
+  transition: all 0.2s ease;
+}
+
+.filter span:hover {
+  color: #2563eb;
+}
+
+.important {
+  color: #059669 !important;
+  font-weight: 500;
+}
+
+.starred {
+  color: #2563eb !important;
+  font-weight: 500;
+}
+
+/* Email List */
+.email-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  flex: 1;
+  width: 100%;
+  
+}
+
+.email-item {
+  display: flex;
+  align-items: center;
+  padding: 12px 20px;
+  border:0.5px solid;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.8) 0%, rgba(248, 250, 252, 0.8) 100%);
+  margin-top: 5px;
+}
+
+.email-item:hover {
+  background: linear-gradient(135deg, rgba(219, 234, 254, 0.4) 0%, rgba(191, 219, 254, 0.4) 100%);
+  transform: translateX(2px);
+}
+
+.email-item.unread {
+  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+  font-weight: 500;
+  border-left: 3px solid #2563eb;
+}
+
+.email-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.star {
+  color: #cbd5e1;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 16px;
+}
+
+.star.starred {
+  color: #eab308;
+  transform: scale(1.1);
+  filter: drop-shadow(0 0 2px rgba(234, 179, 8, 0.3));
+}
+
+.sender {
+  width: 200px;
+  font-weight: 500;
+  color: #1e293b;
+  background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.subject {
+  flex-grow: 1;
+  color: #64748b;
+  margin: 0 15px;
+}
+
+.time {
+  color: #94a3b8;
+  font-size: 12px;
+  min-width: 60px;
+  text-align: right;
+}

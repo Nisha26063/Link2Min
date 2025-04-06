@@ -42,9 +42,10 @@ export const Mailbox = () => {
     },[]
   );
 
-  const handleMail=()=>
+  const handleMail=(data)=>
   {
-    navigate("/dashboard/mail")
+    console.log(data)
+    navigate("/dashboard/mail", { state: { message: data } });
   }
 
  
@@ -67,9 +68,9 @@ export const Mailbox = () => {
  
             </div>
 
-            <div className="sender" onClick={handleMail}>{email.sender}</div>
-            <div className="subject" onClick={handleMail}>{email.subject}</div>
-            <div className="time" onClick={handleMail}>{email.date}</div>
+            <div className="sender" onClick={()=>handleMail(email)}>{email.sender}</div>
+            <div className="subject" onClick={()=>handleMail(email)}>{email.subject}</div>
+            <div className="time" onClick={()=>handleMail(email)}>{email.date}</div>
 
           </li>
         ))}

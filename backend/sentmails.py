@@ -51,7 +51,7 @@ def get_sent_emails():
                 "id": email['id'],
                 "recipient": email['recipient'],
                 "subject": email['subject'],
-                "message": email['message'],
+                "body": email['message'],
                 "sent_at": formatted_date
                 
             })

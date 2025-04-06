@@ -55,8 +55,8 @@ const Schedule = () => {
                             <td>{meeting.end_time}</td>
                             <td>{meeting.attendees}</td>
                             <td>
-                                <button onClick={() => handleMeetingClick(meeting.id, meeting.meet_link, meeting.title, meeting.attendees)}>
-                                    Start Scraping
+                                <button onClick={() => handleMeetingClick(meeting.id, meeting.meet_link, meeting.title, meeting.attendees)} className="start-btn">
+                                    Start Meeting
                                 </button>
                             </td>
                         </tr>

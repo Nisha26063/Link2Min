@@ -103,100 +103,135 @@ def summarize_transcript_with_gemini(transcript, date, participants):
         return None
 
 def start_meeting(meeting_id, meeting_name, url, participants):
-    """Start a Google Meet session and extract captions."""
-    # Automatically capture the current date and time
+    """Start a Google Meet session and extract captions until manually closed."""
     current_date_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-
+    
     options = Options()
-    options.add_argument("--use-fake-ui-for-media-stream")  # Auto-approve mic/camera permissions
-    options.add_argument("--disable-blink-features=AutomationControlled")  # Reduce bot detection
-    options.add_argument("--disable-gpu")  # Fix GPU rendering error
+    options.add_argument("--use-fake-ui-for-media-stream")
+    options.add_argument("--disable-blink-features=AutomationControlled")
+    options.add_argument("--disable-gpu")
     options.add_argument("--disable-software-rasterizer")
     options.add_argument("--no-sandbox")
-    options.add_argument("--disable-dev-shm-usage")  # Prevent crashes in low-memory environments
+    options.add_argument("--disable-dev-shm-usage")
     options.add_argument("--ignore-certificate-errors")
-    options.add_argument("--remote-debugging-port=9222")  # Enable remote debugging
-    options.add_argument("--disable-extensions")  # Disable extensions
-    options.add_argument("--disable-popup-blocking")  # Disable popups
-    options.add_argument("--disable-notifications")  # Disable notifications
+    options.add_argument("--remote-debugging-port=9222")
+    options.add_argument("--disable-extensions")
+    options.add_argument("--disable-popup-blocking")
+    options.add_argument("--disable-notifications")
+    options.add_argument("--start-maximized")
 
-    # Start undetected ChromeDriver
-    driver = uc.Chrome(options=options, use_subprocess=True)
-    driver.implicitly_wait(30)  # Increase implicit wait time
+    # Remove the detach option and use keep_alive instead
+    driver = uc.Chrome(
+        options=options,
+        use_subprocess=True,
+        keep_alive=True  # This will help maintain the connection
+    )
+    driver.implicitly_wait(30)
 
     print(f"Opening Google Meet: {url}")
     driver.get(url)
     print("Google Meet page loaded.")
 
-    # Check if bot detection is bypassed
-    is_bot = driver.execute_script("return navigator.webdriver")
-    print(f"Bot Detection Bypassed: {is_bot}")
-
-    if is_bot:
-        print("Bot detection triggered. Try updating undetected-chromedriver.")
-        driver.quit()
-        return
-
+    # Rest of your function remains the same...
     transcript = ""
-    last_captions_text = ""  # Track the last captured text
+    last_captions_text = ""
+    last_activity_time = time.time()
+    no_captions_count = 0
 
     try:
-        # Wait for captions container to load
-        WebDriverWait(driver, 60).until(
+        WebDriverWait(driver, 120).until(
             EC.presence_of_element_located((By.CSS_SELECTOR, 'div[aria-label="Captions"] div[jsname="tgaKEf"]'))
         )
+        print("Captions container found. Starting transcript capture...")
 
-        # Poll for captions
         while True:
             try:
-                if not driver.session_id:
-                    print("Browser session terminated.")
+                if not driver.service.process:
+                    print("Browser process terminated.")
                     break
 
                 captions = driver.find_elements(By.CSS_SELECTOR, 'div[aria-label="Captions"] div[jsname="tgaKEf"]')
+                
                 if captions:
-                    current_captions_text = " ".join([c.text for c in captions])
+                    no_captions_count = 0
+                    current_captions_text = " ".join([c.text for c in captions if c.text])
 
-                    # Split the captions text into lines
-                    current_lines = current_captions_text.split(". ")
-                    last_lines = last_captions_text.split(". ")
+                    if current_captions_text:
+                        current_lines = current_captions_text.split(". ")
+                        last_lines = last_captions_text.split(". ")
 
-                    # Append only new lines to the transcript
-                    for line in current_lines:
-                        if line not in last_lines:
-                            transcript += line + ". "
-                            print("Captured Line:", line)
+                        for line in current_lines:
+                            if line and line not in last_lines:
+                                transcript += line + ". "
+                                print("Captured Line:", line)
+                                last_activity_time = time.time()
 
-                    last_captions_text = current_captions_text  # Update the last captured text
+                        last_captions_text = current_captions_text
                 else:
-                    print("No captions found.")
+                    no_captions_count += 1
+                    print(f"No captions found ({no_captions_count}/10)")
+                    
+                    if no_captions_count >= 10:
+                        print("No captions for 10 consecutive attempts. Checking meeting status...")
+                        try:
+                            end_indicators = driver.find_elements(By.XPATH, "//*[contains(text(), 'Meeting ended') or contains(text(), 'Call ended')]")
+                            if end_indicators:
+                                print("Meeting has ended naturally.")
+                                break
+                            else:
+                                no_captions_count = 0
+                        except:
+                            no_captions_count = 0
 
-                time.sleep(5)  # Poll every 5 seconds
+                if time.time() - last_activity_time > 300:
+                    print("No new captions for 5 minutes. Meeting may be idle.")
+                    try:
+                        meeting_title = driver.title
+                        if "Google Meet" not in meeting_title:
+                            print("No longer in meeting. Exiting.")
+                            break
+                    except:
+                        print("Unable to check meeting status. Continuing capture.")
+                    
+                    last_activity_time = time.time()
+
+                time.sleep(5)
+
             except Exception as e:
-                print("Error extracting captions:", e)
-                break  # Exit loop if error occurs
+                print(f"Error in captions loop: {e}")
+                try:
+                    driver.save_screenshot(f"error_{int(time.time())}.png")
+                except:
+                    pass
+                
+                try:
+                    driver.title
+                    print("Browser still responsive. Continuing...")
+                    time.sleep(10)
+                    continue
+                except:
+                    print("Browser not responsive. Exiting.")
+                    break
 
     except Exception as e:
-        print(f"Meet loading error: {e}")
-        driver.save_screenshot("error.png")  # Take a screenshot on error
+        print(f"Meet initialization error: {e}")
+        driver.save_screenshot("initialization_error.png")
+    finally:
+        if transcript.strip():
+            minutes = summarize_transcript_with_gemini(transcript, current_date_time, participants)
+            
+            if not minutes:
+                print("Failed to generate minutes. Using raw transcript as fallback.")
+                minutes = transcript
 
-    # Summarize the transcript into meeting minutes using Gemini API
-    minutes = summarize_transcript_with_gemini(transcript, current_date_time, participants)
+            print("Generated Minutes:")
+            print(minutes)
 
-    if not minutes:
-        print("Failed to generate minutes. Using raw transcript as fallback.")
-        minutes = transcript
+            store_transcript(meeting_id, meeting_name, url, transcript, current_date_time, participants, minutes)
+        else:
+            print("No transcript captured. Skipping minutes generation.")
 
-    # Print the minutes text in the prompt
-    print("Generated Minutes:")
-    print(minutes)
-
-    # Store the transcript and minutes text in the database
-    store_transcript(meeting_id, meeting_name, url, transcript, current_date_time, participants, minutes)
-
-    # Keep the browser open for 30 seconds before quitting
-    time.sleep(30)
-    driver.quit()
+        print("Meeting capture complete. Browser will remain open until manually closed.")
 
 def store_transcript(meeting_id, meeting_name, meet_url, transcript, date, participants, minutes_text):
     """Save extracted transcript and generated minutes in SQLite."""

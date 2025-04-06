@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { FaStar } from "react-icons/fa";
+
 import "../css/mailbox.css";
 import { useNavigate } from "react-router-dom";
 
@@ -9,10 +9,11 @@ const SpamEmails = () => {
 
   let navigate=useNavigate();
   
-  const handleMail=()=>
-  {
-    navigate("/dashboard/mail")
-  }
+  const handleMail=(data)=>
+    {
+      console.log(data)
+      navigate("/dashboard/mail", { state: { message: data } });
+    }
 
   useEffect(() => {
     fetch("http://localhost:5002/spam")  // Changed endpoint to /spam
@@ -33,12 +34,7 @@ const SpamEmails = () => {
       });
   }, [emails]);
 
-  const toggleStar = (index) => {
-    const updatedEmails = emails.map((email, i) =>
-      i === index ? { ...email, starred: !email.starred } : email
-    );
-    setEmails(updatedEmails);
-  };
+
 
   return (
     <main className="inbox">
@@ -57,18 +53,15 @@ e.starred).length}</span></span>
       ) : emails.length > 0 ? (
         <ul className="email-list">
           {emails.map((email, index) => (
-            <li key={index} className={`email-item ${email.unread ?
-"unread" : ""}`}>
+            <li key={index} onClick={()=>handleMail({subject:email.subject,sender:email.sender,date:email.date,body:""})} className={`email-item ${email.unread ?
+"unread" : ""}` }>
               <div className="email-checkbox">
                 <input type="checkbox" />
-                <FaStar
-                  className={`star ${email.starred ? "starred" : ""}`}
-                  onClick={() => toggleStar(index)}
-                />
+
               </div>
-              <div className="sender" onClick={handleMail}>{email.sender}</div>
-              <div className="subject" onClick={handleMail}>{email.subject}</div>
-              <div className="time" onClick={handleMail}>{email.date}</div>
+              <div className="sender" >{email.sender}</div>
+              <div className="subject" >{email.subject}</div>
+              <div className="time" >{email.date}</div>
             </li>
           ))}
         </ul>

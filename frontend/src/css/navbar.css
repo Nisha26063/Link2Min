@@ -99,3 +99,24 @@
     transform: scale(1.05);
   }
   
+  .logout-btn
+  {
+    padding: 8px;
+    border-radius: 10px;
+    transition: background-color 0.75s, color 0.75s;
+    font-weight: bold;
+    background-color: red;
+    color: whitesmoke;
+    font-size: 20px;
+    margin-right: 10px;
+  }
+
+  .logout-btn:hover
+  {
+    background-color: black;
+    color: #5f6368;
+    
+    
+  }
+
+  

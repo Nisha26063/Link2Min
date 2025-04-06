@@ -31,10 +31,10 @@ def get_important_emails():
     db_path = os.path.abspath("mails.db")
     conn = sqlite3.connect(db_path)  # Adjust database name if needed
     cursor = conn.cursor()
-    cursor.execute("SELECT subject, sender, date FROM emails WHERE important=1")
+    cursor.execute("SELECT subject, sender, date, body FROM emails WHERE important=1")
     emails = cursor.fetchall()
     conn.close()
-    return [{"subject": row[0], "sender": row[1], "date": row[2]} for row in emails]
+    return [{"subject": row[0], "sender": row[1], "date": row[2],"body":row[3]} for row in emails]
 
 @app.route("/important", methods=["GET"])
 def fetch_important_emails():
@@ -46,10 +46,10 @@ def fetch_all_emails():
     db_path = os.path.abspath("mails.db")
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
-    cursor.execute("SELECT subject, sender, date FROM emails")  # Fetch all emails
+    cursor.execute("SELECT subject, sender, date, body FROM emails")  # Fetch all emails
     emails = cursor.fetchall()
     conn.close()
-    return jsonify({"emails": [{"subject": row[0], "sender": row[1], "date": row[2]} for row in emails]})
+    return jsonify({"emails": [{"subject": row[0], "sender": row[1], "date": row[2],"body":row[3]} for row in emails]})
 
 # --------------------------------------------
 @app.route("/spam", methods=["GET"])

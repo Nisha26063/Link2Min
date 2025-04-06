@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import "../css/mailbox.css";
+import "../css/important.css";
 import { useNavigate } from "react-router-dom";
 
 const ImportantEmails = () => {
@@ -9,9 +9,11 @@ const ImportantEmails = () => {
   
   let navigate=useNavigate();
 
-  const handleMail=()=>{
-    navigate("/dashboard/mail")
-  }
+  const handleMail=(data)=>
+    {
+      console.log(data)
+      navigate("/dashboard/mail", { state: { message: data } });
+    }
 
   useEffect(() => {
     fetch("http://localhost:5002/important")
@@ -54,9 +56,9 @@ const ImportantEmails = () => {
                 <input type="checkbox" />
 
               </div>
-              <div className="sender" onClick={handleMail}>{email.sender}</div>
-              <div className="subject" onClick={handleMail}>{email.subject}</div>
-              <div className="time" onClick={handleMail}>{email.date}</div>
+              <div className="sender" onClick={()=>handleMail(email)}>{email.sender}</div>
+              <div className="subject" onClick={()=>handleMail(email)}>{email.subject}</div>
+              <div className="time" onClick={()=>handleMail(email)}>{email.date}</div>
             </li>
           ))}
         </ul>
